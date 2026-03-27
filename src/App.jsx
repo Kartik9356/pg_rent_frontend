@@ -1,9 +1,8 @@
-import React from 'react'
 
-const App = () => {
-  return (
-    <div className='bg-amber-400'>App</div>
-  )
+import Home from "./pages/Home";
+
+function App() {
+  return <Home />;
 }
 
-export default App
+export default App;
