@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f5efe3;
+  color: #2e1b1b;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: linear-gradient(180deg, #4b2e2e, #2e1b1b);
+  color: white;
+  padding: 20px;
+  position: fixed;
+}
+
+/* Main */
+.main {
+  margin-left: 220px;
+  padding: 20px;
+}
+
+/* Cards */
+.card {
+  background: #fffaf0;
+  padding: 20px;
+  border-top: 3px solid #d4af37;
+}
+
+/* Buttons */
+button {
+  background: #d4af37;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #b8962e;
+}
+
+/* Chart container fix */
+.chart-container {
+  background: #fffaf0;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+
+  /* 👇 IMPORTANT: control height */
+  height: 350px;       /* adjust (300–400px ideal) */
+  max-height: 400px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Make canvas/chart responsive inside */
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Reduce spacing of cards area */
+.cards {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* Improve card size */
+.card {
+  flex: 1;
+  min-width: 180px;
+  background: #fffaf0;
+  padding: 15px;
+  border-top: 3px solid #d4af37;
+  border-radius: 8px;
+}
+
+/* Optional: tighten main layout */
+.main {
+  margin-left: 220px;
+  padding: 15px 20px;
+}

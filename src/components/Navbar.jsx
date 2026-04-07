@@ -18,7 +18,6 @@ function Navbar({ openLogin, openSignup }) {
       <div className="auth-buttons">
         <button className="login-btn" onClick={openLogin}>Login</button>
         <button className="signup-btn" onClick={openSignup}>Signup</button>
-        
       </div>
     </nav>
   );
