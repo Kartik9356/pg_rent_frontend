@@ -1,0 +1,29 @@
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: linear-gradient(180deg, #4b2e2e, #2e1b1b);
+  color: white;
+  padding: 20px 0;
+  position: fixed;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 12px 20px;
+  color: #ddd;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: 0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: rgba(255,255,255,0.08);
+  border-left: 3px solid #d4af37;
+  color: #fff;
+}

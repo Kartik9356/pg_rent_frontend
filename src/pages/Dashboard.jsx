@@ -2,41 +2,59 @@ import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import Cards from "../components/Cards";
-import ChartSection from "../components/ChartSection";
+import ChartBox from "../components/Chartbox";
 import PropertyTable from "../components/PropertyTable";
-import AddPropertyForm from "../components/AddPropertyForm";
-
+import PropertyForm from "../components/PropertyForm";
+import "../dashboard.css";
 
 
 const Dashboard = () => {
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState([
+    {
+      name: "Room A",
+      location: "Delhi",
+      price: "5000",
+      image: "https://www.futuristarchitecture.com/wp-content/uploads/2019/02/SIMPLE-Hostel-1.jpg",
+    },
+    {
+      name: "Room B",
+      location: "Mumbai",
+      price: "7000",
+      image: "https://www.futuristarchitecture.com/wp-content/uploads/2019/02/SIMPLE-Hostel-1.jpg",
+    },
+  ]);
 
-  const addProperty = (newProperty) => {
-    setProperties([...properties, newProperty]);
+  const addProperty = (p) => {
+    setProperties([...properties, p]);
   };
 
-  const deleteProperty = (index) => {
-    const updated = properties.filter((_, i) => i !== index);
+  const deleteProperty = (i) => {
+    const updated = [...properties];
+    updated.splice(i, 1);
     setProperties(updated);
   };
 
-  return (
-    <div className="flex bg-[#f5efe3] min-h-screen text-[#2e1b1b]">
-      <Sidebar />
+  const editProperty = (i) => {
+    const p = properties[i];
+    deleteProperty(i);
+    alert("Edit values manually in form");
+  };
 
-      <div className="ml-[220px] w-full p-6">
+  return (
+    <>
+      <Sidebar />
+      <div className="main">
         <Topbar />
         <Cards />
-        <ChartSection />
-
-        <PropertyTable 
-          properties={properties} 
-          deleteProperty={deleteProperty} 
+        <ChartBox />
+        <PropertyTable
+          properties={properties}
+          deleteProperty={deleteProperty}
+          editProperty={editProperty}
         />
-
-        <AddPropertyForm addProperty={addProperty} />
+        <PropertyForm addProperty={addProperty} />
       </div>
-    </div>
+    </>
   );
 };
 
