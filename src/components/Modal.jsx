@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { requestRegisterOTP, requestLoginOTP, verifyOTP } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
 function Modal({ type, closeModal }) {
   const [step, setStep] = useState("form"); // form | otp
@@ -11,6 +12,8 @@ function Modal({ type, closeModal }) {
     method: "email",
     otp: ""
   });
+
+  const navigate = useNavigate();
 
   // 🔥 Handle Submit (Register/Login)
   const handleSubmit = async () => {
@@ -34,20 +37,35 @@ function Modal({ type, closeModal }) {
   };
 
   // 🔥 Verify OTP
-  const handleVerify = async () => {
-    try {
-      await verifyOTP({
-        email: form.email,
-        otp: form.otp
-      });
+ const handleVerify = async () => {
+  try {
+    const res = await verifyOTP({
+      email: form.email,
+      otp: form.otp
+    });
 
-      alert("Login Successful 🎉");
-      closeModal();
+    // ✅ THIS is where JSON is USED
+    const user = res.data.user;
 
-    } catch {
-      alert("Invalid OTP");
+    // ✅ store user
+    localStorage.setItem("user", JSON.stringify(user));
+
+    alert("Login Successful 🎉");
+    closeModal();
+
+    // ✅ redirect based on role
+    if (user.role === "admin") {
+      navigate("/admin");
+    } else if (user.role === "owner") {
+      navigate("/owner");
+    } else {
+      navigate("/");
     }
-  };
+
+  } catch {
+    alert("Invalid OTP");
+  }
+};
 
   return (
     <div className="modal" style={{ display: "flex" }}>
