@@ -1,41 +1,50 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 
+// Import Pages
 import Home from "../pages/Home";
-import Dashboard from "../pages/Dashboard"; // Admin
 import OwnerDashboard from "../pages/OwnerDashboard";
+import Dashboard from "../pages/Dashboard";
+import AddPropertyForm from "../components/AddPropertyForm";
 
+// Import Protected Route
 import ProtectedRoute from "./ProtectedRouter";
 
+// Notice we removed the <Router> wrapper here!
 const AppRouter = () => {
   return (
-    <BrowserRouter>
-      <Routes>
+    <Routes>
+      <Route path="/" element={<Home />} />
 
-        {/* Main Page */}
-        <Route path="/" element={<Home />} />
+      <Route
+        path="/owner/*"
+        element={
+          <ProtectedRoute role="owner">
+            <OwnerDashboard />
+          </ProtectedRoute>
+        }
+      />
 
-        {/* Admin Dashboard */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute role="admin">
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+      <Route
+        path="/admin/*"
+        element={
+          <ProtectedRoute role="admin">
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
 
-        {/* Owner Dashboard */}
-        <Route
-          path="/owner"
-          element={
-            <ProtectedRoute role="owner">
-              <OwnerDashboard />
-            </ProtectedRoute>
-          }
-        />
+      <Route
+        path="/owner/add-property"
+        element={
+          <ProtectedRoute role="owner">
+            <AddPropertyForm />
+          </ProtectedRoute>
+        }
+      />
 
-      </Routes>
-    </BrowserRouter>
+      <Route path="*" element={<h2>404 - Page Not Found</h2>} />
+    </Routes>
   );
 };
 
