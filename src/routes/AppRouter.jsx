@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom"; // 🔥 Notice we removed BrowserRouter here!
 
 // Import Pages
 import Home from "../pages/Home";
@@ -10,14 +10,13 @@ import AddPropertyForm from "../components/AddPropertyForm";
 // Import Protected Route
 import ProtectedRoute from "./ProtectedRouter";
 
-// Notice we removed the <Router> wrapper here!
 const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
 
       <Route
-        path="/owner/*"
+        path="/owner"
         element={
           <ProtectedRoute role="owner">
             <OwnerDashboard />
@@ -26,7 +25,7 @@ const AppRouter = () => {
       />
 
       <Route
-        path="/admin/*"
+        path="/admin"
         element={
           <ProtectedRoute role="admin">
             <Dashboard />

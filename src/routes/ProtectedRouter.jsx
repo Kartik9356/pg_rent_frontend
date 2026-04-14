@@ -1,47 +1,22 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-// Import Pages
-import Home from "../pages/Home";
-import OwnerDashboard from "../pages/OwnerDashboard";
-import Dashboard from "../pages/Dashboard"; // Assuming this is the Admin dashboard
+const ProtectedRoute = ({ children, role }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
 
-// Import the Protected Route Component
-// Note: You might want to rename ProtectedRouter.jsx to ProtectedRoute.jsx for standard naming conventions
-import ProtectedRoute from "./ProtectedRouter";
+  // 1. If the user is not logged in at all, kick them to the home page
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
 
-const AppRouter = () => {
-  return (
-    <Router>
-      <Routes>
-        {/* 1. PUBLIC ROUTES (Anyone can view) */}
-        <Route path="/" element={<Home />} />
+  // 2. If the route requires a specific role, and the user doesn't have it, kick them out
+  if (role && user.role !== role) {
+    return <Navigate to="/" replace />;
+  }
 
-        {/* 2. OWNER ROUTES (Only verified owners) */}
-        <Route
-          path="/owner/*"
-          element={
-            <ProtectedRoute role="owner">
-              <OwnerDashboard />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* 3. ADMIN ROUTES (Only verified admins) */}
-        <Route
-          path="/admin/*"
-          element={
-            <ProtectedRoute role="admin">
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Optional: Catch-all route for 404 Not Found */}
-        <Route path="*" element={<h2>404 - Page Not Found</h2>} />
-      </Routes>
-    </Router>
-  );
+  // 3. If they pass the checks, render the component!
+  return children;
 };
 
-export default AppRouter;
+// Exporting it as ProtectedRoute (make sure your AppRouter.jsx imports it with this name!)
+export default ProtectedRoute;

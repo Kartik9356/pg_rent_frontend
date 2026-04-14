@@ -15,6 +15,7 @@ function App() {
       try {
         const res = await api.get("/users/profile");
         setUser(res.data);
+        localStorage.setItem("user", JSON.stringify(res.data));
       } catch (err) {
         setUser(null);
         localStorage.removeItem("user");
