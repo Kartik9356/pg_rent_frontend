@@ -3,24 +3,34 @@ import { requestRegisterOTP, requestLoginOTP, verifyOTP } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 
 function Modal({ type, closeModal }) {
-  const [step, setStep] = useState("form"); // form | otp
+  const [step, setStep] = useState("form");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
-    role: "seeker", // ✅ Added role with default
-    method: "email", // default OTP method
+    role: "seeker",
+    method: "email",
     otp: "",
   });
 
   const navigate = useNavigate();
 
-  // 🔥 Handle Submit (Register/Login)
+  // 🔥 SHOW MESSAGE
+  const showMessage = (text, type = "success") => {
+    setMessage({ text, type });
+    setTimeout(() => {
+      setMessage({ text: "", type: "" });
+    }, 3000);
+  };
+
+  // 🔥 SEND OTP
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       if (type === "signup") {
-        // ✅ Matches exact /users/register payload
         await requestRegisterOTP({
           name: form.name,
           email: form.email,
@@ -29,108 +39,79 @@ function Modal({ type, closeModal }) {
           method: form.method,
         });
       } else {
-        // ✅ Matches exact /users/login payload
         await requestLoginOTP({
           email: form.email,
           method: form.method,
         });
       }
 
-      alert(`OTP Sent to your ${form.method}!`);
+      showMessage(`OTP sent successfully via ${form.method}`);
       setStep("otp");
     } catch (err) {
-      console.log(err);
-      alert(err.response?.data?.message || "Error processing request");
+      showMessage(
+        err.response?.data?.message || "Something went wrong",
+        "error"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  // 🔥 Verify OTP
+  // 🔥 VERIFY OTP
   const handleVerify = async () => {
+    setLoading(true);
     try {
-      // ✅ Matches exact /users/verify payload
       const res = await verifyOTP({
         email: form.email,
         otp: form.otp,
       });
 
-      // ✅ FIXED: According to your API doc, the response IS the user object directly, not res.data.user
       const user = res.data;
-
-      // ✅ Store user info locally for UI state (Remember: JWT is safe in HTTP-only cookie!)
       localStorage.setItem("user", JSON.stringify(user));
 
-      alert("Login Successful 🎉");
-      closeModal();
+      showMessage("Login Successful 🎉");
 
-      // ✅ Redirect based on the user's role returned from the database
-      if (user.role === "admin") {
-        navigate("/admin");
-      } else if (user.role === "owner") {
-        navigate("/owner");
-      } else {
-        navigate("/");
-      }
+      setTimeout(() => {
+        closeModal();
+
+        if (user.role === "admin") navigate("/admin");
+        else if (user.role === "owner") navigate("/owner");
+        else navigate("/");
+      }, 1000);
     } catch (err) {
-      alert(err.response?.data?.message || "Invalid OTP");
+      showMessage(
+        err.response?.data?.message || "Invalid OTP",
+        "error"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div
-      className="modal"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0,0,0,0.5)",
-      }}
-    >
-      <div
-        className="modal-content"
-        style={{
-          background: "white",
-          padding: "2rem",
-          borderRadius: "8px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          minWidth: "300px",
-        }}
-      >
+    <div className="modal-overlay">
+      <div className="modal-box">
+
+        {/* MESSAGE */}
+        {message.text && (
+          <div className={`toast ${message.type}`}>
+            {message.text}
+          </div>
+        )}
+
         {/* HEADER */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h2 style={{ margin: 0 }}>
+        <div className="modal-header">
+          <h2>
             {step === "otp"
               ? "Enter OTP"
               : type === "login"
-                ? "Login"
-                : "Signup"}
+              ? "Login"
+              : "Signup"}
           </h2>
-          <button
-            onClick={closeModal}
-            style={{
-              cursor: "pointer",
-              background: "none",
-              border: "none",
-              fontSize: "1.2rem",
-            }}
-          >
-            ✖
-          </button>
+          <button onClick={closeModal} className="close-btn">✖</button>
         </div>
 
-        {/* FORM STEP */}
+        {/* FORM */}
         {step === "form" && (
           <>
             {type === "signup" && (
@@ -139,25 +120,28 @@ function Modal({ type, closeModal }) {
                   type="text"
                   placeholder="Full Name"
                   value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, name: e.target.value })
+                  }
                 />
+
                 <input
                   type="text"
-                  placeholder="Phone Number (+91...)"
+                  placeholder="Phone Number"
                   value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, phone: e.target.value })
+                  }
                 />
-                {/* ✅ Added Role Selector for Signup */}
+
                 <select
                   value={form.role}
-                  onChange={(e) => setForm({ ...form, role: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, role: e.target.value })
+                  }
                 >
-                  <option value="seeker">
-                    I am looking for a room (Seeker)
-                  </option>
-                  <option value="owner">
-                    I want to list my property (Owner)
-                  </option>
+                  <option value="seeker">Seeker</option>
+                  <option value="owner">Owner</option>
                 </select>
               </>
             )}
@@ -166,36 +150,43 @@ function Modal({ type, closeModal }) {
               type="email"
               placeholder="Email Address"
               value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, email: e.target.value })
+              }
             />
 
-            {/* ✅ Added OTP Delivery Method Selector */}
-            <div style={{ display: "flex", gap: "10px", margin: "10px 0" }}>
+            <div className="radio-group">
               <label>
                 <input
                   type="radio"
                   value="email"
                   checked={form.method === "email"}
-                  onChange={(e) => setForm({ ...form, method: e.target.value })}
-                />{" "}
+                  onChange={(e) =>
+                    setForm({ ...form, method: e.target.value })
+                  }
+                />
                 Email OTP
               </label>
+
               <label>
                 <input
                   type="radio"
                   value="sms"
                   checked={form.method === "sms"}
-                  onChange={(e) => setForm({ ...form, method: e.target.value })}
-                />{" "}
+                  onChange={(e) =>
+                    setForm({ ...form, method: e.target.value })
+                  }
+                />
                 SMS OTP
               </label>
             </div>
 
             <button
               onClick={handleSubmit}
-              style={{ padding: "10px", marginTop: "10px", cursor: "pointer" }}
+              className="primary-btn"
+              disabled={loading}
             >
-              Send OTP
+              {loading ? <span className="loader"></span> : "Send OTP"}
             </button>
           </>
         )}
@@ -203,36 +194,34 @@ function Modal({ type, closeModal }) {
         {/* OTP STEP */}
         {step === "otp" && (
           <>
-            <p style={{ fontSize: "0.9rem", color: "gray" }}>
+            <p className="otp-text">
               Sent to{" "}
               {form.method === "email"
                 ? form.email
                 : form.phone || "your phone"}
             </p>
+
             <input
               type="text"
-              placeholder="Enter 6-digit OTP"
+              placeholder="Enter OTP"
               maxLength={6}
               value={form.otp}
-              onChange={(e) => setForm({ ...form, otp: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, otp: e.target.value })
+              }
             />
 
             <button
               onClick={handleVerify}
-              style={{ padding: "10px", marginTop: "10px", cursor: "pointer" }}
+              className="primary-btn"
+              disabled={loading}
             >
-              Verify & Login
+              {loading ? <span className="loader"></span> : "Verify & Login"}
             </button>
+
             <button
               onClick={() => setStep("form")}
-              style={{
-                padding: "10px",
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                color: "blue",
-                textDecoration: "underline",
-              }}
+              className="secondary-btn"
             >
               Go Back
             </button>

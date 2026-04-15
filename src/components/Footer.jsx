@@ -1,21 +1,22 @@
 function Footer() {
   return (
     <footer className="footer">
-      
+
       <div className="footer-container">
 
         {/* BRAND */}
         <div className="footer-col brand">
-          <h2>Room Buddy</h2>
-          <p>
+          <h2 className="logo-text">Room Buddy</h2>
+
+          <p className="footer-desc">
             Find your perfect PG, hostel or rental home with comfort,
             safety and zero brokerage.
           </p>
 
           <div className="social-icons">
-            <a href="#">🌐</a>
-            <a href="#">📸</a>
-            <a href="#">💼</a>
+            <a href="#" className="icon">🌐</a>
+            <a href="#" className="icon">📸</a>
+            <a href="#" className="icon">💼</a>
           </div>
         </div>
 
@@ -42,11 +43,11 @@ function Footer() {
         </div>
 
         {/* NEWSLETTER */}
-        <div className="footer-col">
+        <div className="footer-col newsletter-col">
           <h3>Stay Updated</h3>
           <p>Get latest rooms & offers</p>
 
-          <div className="newsletter">
+          <div className="newsletter-box">
             <input type="email" placeholder="Enter your email" />
             <button>Subscribe</button>
           </div>
