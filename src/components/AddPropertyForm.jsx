@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
-import { 
-  Plus, 
-  MapPin, 
-  Home, 
-  Trash2, 
-  UploadCloud, 
-  Wifi, 
-  Building2, 
-  DollarSign, 
+import {
+  Plus,
+  MapPin,
+  Building2,
+  Trash2,
+  UploadCloud,
+  Wifi,
+  DollarSign,
   Users,
-  Image as ImageIcon
+  Image as ImageIcon,
 } from "lucide-react";
 
 function AddPropertyForm() {
@@ -31,11 +30,13 @@ function AddPropertyForm() {
     latitude: "",
     longitude: "",
     amenities: "",
+    // Flat Specs
     bhkType: "1BHK",
     furnishing: "Fully Furnished",
     rentAmount: "",
     depositAmount: "",
     tenantPreference: "Anyone",
+    // PG Specs
     sharingType: "Single",
     pricePerBed: "",
     depositPerBed: "",
@@ -49,13 +50,19 @@ function AddPropertyForm() {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      // Handle the foodIncluded dropdown boolean conversion
+      [name]:
+        name === "foodIncluded"
+          ? value === "true"
+          : type === "checkbox"
+            ? checked
+            : value,
     });
   };
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    
+
     // Combine with existing images if total doesn't exceed 5
     const totalImages = images.length + files.length;
     if (totalImages > 5) {
@@ -65,7 +72,7 @@ function AddPropertyForm() {
 
     const newImages = [...images, ...files];
     setImages(newImages);
-    
+
     // Create new previews
     const newPreviews = files.map((file) => URL.createObjectURL(file));
     setPreviewImages([...previewImages, ...newPreviews]);
@@ -74,10 +81,10 @@ function AddPropertyForm() {
   const handleRemoveImage = (index) => {
     const updatedImages = images.filter((_, i) => i !== index);
     const updatedPreviews = previewImages.filter((_, i) => i !== index);
-    
+
     // Revoke the URL to avoid memory leaks
     URL.revokeObjectURL(previewImages[index]);
-    
+
     setImages(updatedImages);
     setPreviewImages(updatedPreviews);
   };
@@ -100,23 +107,20 @@ function AddPropertyForm() {
           city: formData.city,
           state: formData.state,
           pincode: formData.pincode,
-        })
+        }),
       );
 
       submitData.append(
         "location",
         JSON.stringify({
           type: "Point",
-          coordinates: [
-            Number(formData.longitude),
-            Number(formData.latitude),
-          ],
-        })
+          coordinates: [Number(formData.longitude), Number(formData.latitude)],
+        }),
       );
 
       submitData.append(
         "generalAmenities",
-        JSON.stringify(formData.amenities.split(",").map(a => a.trim()))
+        JSON.stringify(formData.amenities.split(",").map((a) => a.trim())),
       );
 
       if (formData.propertyCategory === "Flat") {
@@ -127,8 +131,8 @@ function AddPropertyForm() {
             furnishing: formData.furnishing,
             rentAmount: Number(formData.rentAmount),
             depositAmount: Number(formData.depositAmount),
-            tenantPreference: formData.tenantPreference,
-          })
+            tenantPreference: formData.tenantPreference, // Restored
+          }),
         );
       } else {
         submitData.append(
@@ -137,24 +141,28 @@ function AddPropertyForm() {
             {
               sharingType: formData.sharingType,
               pricePerBed: Number(formData.pricePerBed),
-              depositPerBed: Number(formData.depositPerBed),
+              depositPerBed: Number(formData.depositPerBed), // Restored
               totalBeds: Number(formData.totalBeds),
-              availableBeds: Number(formData.availableBeds),
+              availableBeds: Number(formData.availableBeds), // Restored
               foodIncluded: formData.foodIncluded,
-              genderRestriction: formData.genderRestriction,
+              genderRestriction: formData.genderRestriction, // Restored
             },
-          ])
+          ]),
         );
       }
 
       images.forEach((file) => submitData.append("images", file));
 
-      await api.post("/properties", submitData);
+      await api.post("/properties", submitData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       alert("Property Uploaded 🚀");
       navigate("/owner");
     } catch (err) {
-      setError("Upload failed. Please check your data.");
+      setError(
+        err.response?.data?.message || "Upload failed. Please check your data.",
+      );
     } finally {
       setLoading(false);
     }
@@ -168,23 +176,29 @@ function AddPropertyForm() {
         {error && <div className="error">{error}</div>}
 
         <form onSubmit={handleSubmit} className="form">
-          <h4><Building2 size={20} /> Basic Details</h4>
+          <h4>
+            <Building2 size={20} /> Basic Details
+          </h4>
           <div className="row">
             <div className="input-group full">
               <label>Property Title</label>
-              <input 
-                name="title" 
-                placeholder="Ex. Luxury 2BHK in Mumbai" 
-                onChange={handleChange} 
-                className="input" 
-                required 
+              <input
+                name="title"
+                placeholder="Ex. Luxury 2BHK in Mumbai"
+                onChange={handleChange}
+                className="input"
+                required
               />
             </div>
           </div>
           <div className="row">
             <div className="input-group">
               <label>Property Type</label>
-              <select name="propertyCategory" onChange={handleChange} className="input">
+              <select
+                name="propertyCategory"
+                onChange={handleChange}
+                className="input"
+              >
                 <option value="Flat">🏠 Flat</option>
                 <option value="PG">🏢 PG / Hostel</option>
               </select>
@@ -193,68 +207,147 @@ function AddPropertyForm() {
               <>
                 <div className="input-group">
                   <label>BHK Type</label>
-                  <select name="bhkType" className="input" onChange={handleChange}>
+                  <select
+                    name="bhkType"
+                    className="input"
+                    onChange={handleChange}
+                  >
+                    <option>1RK</option>
                     <option>1BHK</option>
                     <option>2BHK</option>
                     <option>3BHK</option>
-                    <option>4BHK+</option>
                   </select>
                 </div>
                 <div className="input-group">
                   <label>Furnishing</label>
-                  <select name="furnishing" className="input" onChange={handleChange}>
+                  <select
+                    name="furnishing"
+                    className="input"
+                    onChange={handleChange}
+                  >
                     <option>Fully Furnished</option>
                     <option>Semi Furnished</option>
                     <option>Unfurnished</option>
+                  </select>
+                </div>
+                {/* RESTORED MISSING FIELD */}
+                <div className="input-group">
+                  <label>Tenant Preference</label>
+                  <select
+                    name="tenantPreference"
+                    className="input"
+                    onChange={handleChange}
+                  >
+                    <option>Anyone</option>
+                    <option>Bachelors</option>
+                    <option>Family</option>
                   </select>
                 </div>
               </>
             )}
           </div>
 
-          <h4><MapPin size={20} /> Location Details</h4>
+          <h4>
+            <MapPin size={20} /> Location Details
+          </h4>
           <div className="input-group full">
             <label>Street Address</label>
-            <input name="street" placeholder="Street" className="input" onChange={handleChange} />
+            <input
+              name="street"
+              placeholder="Street"
+              className="input"
+              onChange={handleChange}
+              required
+            />
           </div>
 
           <div className="row">
             <div className="input-group">
               <label>City</label>
-              <input name="city" placeholder="City" className="input" onChange={handleChange} />
+              <input
+                name="city"
+                placeholder="City"
+                className="input"
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="input-group">
               <label>State</label>
-              <input name="state" placeholder="State" className="input" onChange={handleChange} />
+              <input
+                name="state"
+                placeholder="State"
+                className="input"
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="input-group">
               <label>Pincode</label>
-              <input name="pincode" placeholder="Pincode" className="input" onChange={handleChange} />
+              <input
+                name="pincode"
+                placeholder="Pincode"
+                className="input"
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
 
           <div className="row">
             <div className="input-group">
               <label>Latitude</label>
-              <input name="latitude" placeholder="Ex. 19.076" className="input" onChange={handleChange} />
+              <input
+                type="number"
+                step="any"
+                name="latitude"
+                placeholder="Ex. 19.076"
+                className="input"
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="input-group">
               <label>Longitude</label>
-              <input name="longitude" placeholder="Ex. 72.877" className="input" onChange={handleChange} />
+              <input
+                type="number"
+                step="any"
+                name="longitude"
+                placeholder="Ex. 72.877"
+                className="input"
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
 
           {formData.propertyCategory === "Flat" && (
             <div className="section flat">
-              <h4><DollarSign size={20} /> Pricing</h4>
+              <h4>
+                <DollarSign size={20} /> Pricing
+              </h4>
               <div className="row">
                 <div className="input-group">
                   <label>Monthly Rent (₹)</label>
-                  <input name="rentAmount" placeholder="Ex. 25000" className="input" onChange={handleChange} />
+                  <input
+                    type="number"
+                    name="rentAmount"
+                    placeholder="Ex. 25000"
+                    className="input"
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="input-group">
                   <label>Deposit (₹)</label>
-                  <input name="depositAmount" placeholder="Ex. 50000" className="input" onChange={handleChange} />
+                  <input
+                    type="number"
+                    name="depositAmount"
+                    placeholder="Ex. 50000"
+                    className="input"
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
             </div>
@@ -262,59 +355,132 @@ function AddPropertyForm() {
 
           {formData.propertyCategory === "PG" && (
             <div className="section pg">
-              <h4><Users size={20} /> PG Details</h4>
+              <h4>
+                <Users size={20} /> PG Details
+              </h4>
               <div className="row">
+                {/* RESTORED MISSING FIELD */}
                 <div className="input-group">
-                  <label>Sharing Type</label>
-                  <select name="sharingType" className="input" onChange={handleChange}>
-                    <option>Single</option>
-                    <option>Double</option>
-                    <option>Triple</option>
-                    <option>Four+</option>
+                  <label>Gender</label>
+                  <select
+                    name="genderRestriction"
+                    className="input"
+                    onChange={handleChange}
+                  >
+                    <option>Boys Only</option>
+                    <option>Girls Only</option>
+                    <option>Co-ed</option>
                   </select>
                 </div>
                 <div className="input-group">
+                  <label>Sharing Type</label>
+                  <select
+                    name="sharingType"
+                    className="input"
+                    onChange={handleChange}
+                  >
+                    <option>Single</option>
+                    <option>Double</option>
+                    <option>Triple</option>
+                    <option>Dormitory</option>
+                  </select>
+                </div>
+              </div>
+              <div className="row">
+                <div className="input-group">
                   <label>Price per Bed (₹)</label>
-                  <input name="pricePerBed" placeholder="Rent per bed" className="input" onChange={handleChange} />
+                  <input
+                    type="number"
+                    name="pricePerBed"
+                    placeholder="Rent per bed"
+                    className="input"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                {/* RESTORED MISSING FIELD */}
+                <div className="input-group">
+                  <label>Deposit per Bed (₹)</label>
+                  <input
+                    type="number"
+                    name="depositPerBed"
+                    placeholder="Deposit per bed"
+                    className="input"
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
               <div className="row">
                 <div className="input-group">
                   <label>Total Beds</label>
-                  <input name="totalBeds" placeholder="Capacity" className="input" onChange={handleChange} />
+                  <input
+                    type="number"
+                    name="totalBeds"
+                    placeholder="Capacity"
+                    className="input"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                {/* RESTORED MISSING FIELD */}
+                <div className="input-group">
+                  <label>Available Beds</label>
+                  <input
+                    type="number"
+                    name="availableBeds"
+                    placeholder="Available now"
+                    className="input"
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="input-group">
                   <label>Food Included</label>
-                  <select name="foodIncluded" className="input" onChange={handleChange}>
-                    <option value={false}>No</option>
-                    <option value={true}>Yes</option>
+                  <select
+                    name="foodIncluded"
+                    className="input"
+                    onChange={handleChange}
+                  >
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
                   </select>
                 </div>
               </div>
             </div>
           )}
 
-          <h4><Wifi size={20} /> Amenities</h4>
+          <h4>
+            <Wifi size={20} /> Amenities
+          </h4>
           <div className="input-group full">
             <label>Amenities (Comma separated)</label>
-            <input name="amenities" placeholder="WiFi, AC, TV, Fridge, Gym..." className="input" onChange={handleChange} />
+            <input
+              name="amenities"
+              placeholder="WiFi, AC, TV, Fridge, Gym..."
+              className="input"
+              onChange={handleChange}
+            />
           </div>
 
-          <h4><ImageIcon size={20} /> Property Images</h4>
-          <div 
-            className="upload-box" 
-            onClick={() => document.getElementById('file-upload').click()}
+          <h4>
+            <ImageIcon size={20} /> Property Images
+          </h4>
+          <div
+            className="upload-box"
+            onClick={() => document.getElementById("file-upload").click()}
           >
             <UploadCloud size={32} />
-            <input 
+            <input
               id="file-upload"
-              type="file" 
-              multiple 
-              accept="image/*" 
-              onChange={handleFileChange} 
-              style={{ display: 'none' }}
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+              required={images.length === 0} // Only required if no images are selected yet
             />
-            <p>Click to upload or drag & drop</p>
+            <p>Click to upload</p>
             <span>Max 5 images allowed (JPG, PNG)</span>
           </div>
 
@@ -324,9 +490,9 @@ function AddPropertyForm() {
               {previewImages.map((src, i) => (
                 <div key={i} className="preview-card">
                   <img src={src} alt={`preview-${i}`} />
-                  <button 
-                    type="button" 
-                    className="remove-img-btn" 
+                  <button
+                    type="button"
+                    className="remove-img-btn"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemoveImage(i);
@@ -349,4 +515,4 @@ function AddPropertyForm() {
   );
 }
 
-export default AddPropertyForm;
+export default AddPropertyForm;
