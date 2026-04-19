@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
-import { 
-  Plus, 
-  MapPin, 
-  Home, 
-  Trash2, 
-  UploadCloud, 
-  Wifi, 
-  Building2, 
-  DollarSign, 
+import {
+  Plus,
+  MapPin,
+  Home,
+  Trash2,
+  UploadCloud,
+  Wifi,
+  Building2,
+  DollarSign,
   Users,
   Image as ImageIcon
 } from "lucide-react";
@@ -55,7 +55,7 @@ function AddPropertyForm() {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    
+
     // Combine with existing images if total doesn't exceed 5
     const totalImages = images.length + files.length;
     if (totalImages > 5) {
@@ -65,7 +65,7 @@ function AddPropertyForm() {
 
     const newImages = [...images, ...files];
     setImages(newImages);
-    
+
     // Create new previews
     const newPreviews = files.map((file) => URL.createObjectURL(file));
     setPreviewImages([...previewImages, ...newPreviews]);
@@ -74,10 +74,10 @@ function AddPropertyForm() {
   const handleRemoveImage = (index) => {
     const updatedImages = images.filter((_, i) => i !== index);
     const updatedPreviews = previewImages.filter((_, i) => i !== index);
-    
+
     // Revoke the URL to avoid memory leaks
     URL.revokeObjectURL(previewImages[index]);
-    
+
     setImages(updatedImages);
     setPreviewImages(updatedPreviews);
   };
@@ -163,7 +163,7 @@ function AddPropertyForm() {
   return (
     <div className="container">
       <div className="card">
-        <h2 className="title">List Your Property</h2>
+        <h2 className="title">List Your Property For Rent</h2>
 
         {error && <div className="error">{error}</div>}
 
@@ -172,12 +172,12 @@ function AddPropertyForm() {
           <div className="row">
             <div className="input-group full">
               <label>Property Title</label>
-              <input 
-                name="title" 
-                placeholder="Ex. Luxury 2BHK in Mumbai" 
-                onChange={handleChange} 
-                className="input" 
-                required 
+              <input
+                name="title"
+                placeholder="Ex. Luxury 2BHK in Mumbai"
+                onChange={handleChange}
+                className="input"
+                required
               />
             </div>
           </div>
@@ -301,17 +301,17 @@ function AddPropertyForm() {
           </div>
 
           <h4><ImageIcon size={20} /> Property Images</h4>
-          <div 
-            className="upload-box" 
+          <div
+            className="upload-box"
             onClick={() => document.getElementById('file-upload').click()}
           >
             <UploadCloud size={32} />
-            <input 
+            <input
               id="file-upload"
-              type="file" 
-              multiple 
-              accept="image/*" 
-              onChange={handleFileChange} 
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
               style={{ display: 'none' }}
             />
             <p>Click to upload or drag & drop</p>
@@ -324,9 +324,9 @@ function AddPropertyForm() {
               {previewImages.map((src, i) => (
                 <div key={i} className="preview-card">
                   <img src={src} alt={`preview-${i}`} />
-                  <button 
-                    type="button" 
-                    className="remove-img-btn" 
+                  <button
+                    type="button"
+                    className="remove-img-btn"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemoveImage(i);
@@ -349,4 +349,4 @@ function AddPropertyForm() {
   );
 }
 
-export default AddPropertyForm;
+export default AddPropertyForm;

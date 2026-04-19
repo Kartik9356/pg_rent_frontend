@@ -9,6 +9,8 @@ import AddPropertyForm from "../components/AddPropertyForm";
 
 // Import Protected Route
 import ProtectedRoute from "./ProtectedRouter";
+import Users from "../components/Users";
+
 
 const AppRouter = () => {
   return (
@@ -38,6 +40,16 @@ const AppRouter = () => {
         element={
           <ProtectedRoute role="owner">
             <AddPropertyForm />
+          </ProtectedRoute>
+        }
+      />
+
+
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute role="admin">
+            <Users />
           </ProtectedRoute>
         }
       />
