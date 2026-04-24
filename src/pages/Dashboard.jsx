@@ -46,13 +46,13 @@ const Dashboard = () => {
       <div className="main">
         <Topbar />
         <Cards />
-        <ChartBox />
+        {/*  <ChartBox /> */}
         <PropertyTable
           properties={properties}
           deleteProperty={deleteProperty}
           editProperty={editProperty}
         />
-        <PropertyForm addProperty={addProperty} />
+        {/*  <PropertyForm addProperty={addProperty} /> */}
       </div>
     </>
   );

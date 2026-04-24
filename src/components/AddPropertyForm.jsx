@@ -4,10 +4,11 @@ import api from "../api/api";
 import {
   Plus,
   MapPin,
-  Building2,
+  Home,
   Trash2,
   UploadCloud,
   Wifi,
+  Building2,
   DollarSign,
   Users,
   Image as ImageIcon,
@@ -171,7 +172,7 @@ function AddPropertyForm() {
   return (
     <div className="container">
       <div className="card">
-        <h2 className="title">List Your Property</h2>
+        <h2 className="title">List Your Property For Rent</h2>
 
         {error && <div className="error">{error}</div>}
 
@@ -463,12 +464,10 @@ function AddPropertyForm() {
             />
           </div>
 
-          <h4>
-            <ImageIcon size={20} /> Property Images
-          </h4>
+          <h4><ImageIcon size={20} /> Property Images</h4>
           <div
             className="upload-box"
-            onClick={() => document.getElementById("file-upload").click()}
+            onClick={() => document.getElementById('file-upload').click()}
           >
             <UploadCloud size={32} />
             <input
@@ -477,8 +476,7 @@ function AddPropertyForm() {
               multiple
               accept="image/*"
               onChange={handleFileChange}
-              style={{ display: "none" }}
-              required={images.length === 0} // Only required if no images are selected yet
+              style={{ display: 'none' }}
             />
             <p>Click to upload</p>
             <span>Max 5 images allowed (JPG, PNG)</span>
