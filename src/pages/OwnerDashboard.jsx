@@ -202,8 +202,10 @@ function OwnerDashboard() {
                     </span>
                   </td>
                   <td style={{ padding: "15px", textAlign: "right" }}>
-                    {/* Placeholder for Edit functionality later */}
                     <button
+                      onClick={() =>
+                        navigate(`/owner/edit-property/${prop._id}`)
+                      }
                       style={{
                         marginRight: "10px",
                         padding: "6px 12px",
@@ -211,11 +213,17 @@ function OwnerDashboard() {
                         border: "1px solid #ccc",
                         borderRadius: "4px",
                         cursor: "pointer",
+                        transition: "background 0.3s",
                       }}
+                      onMouseOver={(e) =>
+                        (e.target.style.background = "#d6d8db")
+                      }
+                      onMouseOut={(e) =>
+                        (e.target.style.background = "#e2e6ea")
+                      }
                     >
                       Edit
                     </button>
-                    {/* 🔥 Working Delete Button */}
                     <button
                       onClick={() => handleDelete(prop._id)}
                       style={{

@@ -6,14 +6,17 @@ import Home from "../pages/Home";
 import OwnerDashboard from "../pages/OwnerDashboard";
 import Dashboard from "../pages/Dashboard";
 import AddPropertyForm from "../components/AddPropertyForm";
-
-// Import Protected Route
+import Rooms from "../pages/Rooms";
+import PropertyDetail from "../pages/PropertyDetail";
 import ProtectedRoute from "./ProtectedRouter";
+import EditPropertyForm from "../components/EditPropertyForm"; // Import it!
 
 const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/rooms" element={<Rooms />} />
+      <Route path="/rooms/:id" element={<PropertyDetail />} />
 
       <Route
         path="/owner"
@@ -38,6 +41,14 @@ const AppRouter = () => {
         element={
           <ProtectedRoute role="owner">
             <AddPropertyForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/owner/edit-property/:id"
+        element={
+          <ProtectedRoute role="owner">
+            <EditPropertyForm />
           </ProtectedRoute>
         }
       />
