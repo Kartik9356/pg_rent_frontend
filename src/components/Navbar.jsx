@@ -57,7 +57,8 @@ function Navbar({ openLogin, openSignup, user, setUser }) {
           // --- UI FOR LOGGED IN USERS ---
           <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
             <span style={{ fontWeight: "bold" }}>
-              Hi, {user.name.split(" ")[0]}!
+              {/*Hi, {user.name.split(" ")[0]}! */}
+              Hi, {user?.name?.split(" ")[0] || "User"}!
             </span>
 
             {/* Smart Routing based on User Role */}
