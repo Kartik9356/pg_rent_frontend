@@ -87,8 +87,8 @@ function HomeListing() {
 
                   <span
                     className={`badge ${prop.propertyCategory === "Flat"
-                        ? "badge-flat"
-                        : "badge-room"
+                      ? "badge-flat"
+                      : "badge-room"
                       }`}
                   >
                     {prop.propertyCategory === "Flat" ? (
