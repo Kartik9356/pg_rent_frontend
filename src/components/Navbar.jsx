@@ -41,14 +41,14 @@ function Navbar({ openLogin, openSignup, user, setUser }) {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <a href="#features">Features</a>
+          <a href="/features">Features</a>
         </li>{" "}
         {/* Keep anchor for on-page scrolling */}
         <li>
           <Link to="/rooms">Rooms</Link>
         </li>
         <li>
-          <a href="#contact">Contact</a>
+          <a href="/contact">Contact</a>
         </li>
       </ul>
 

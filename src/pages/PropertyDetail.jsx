@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/api";
+
+// 🔥 1. Swap the raw API import for your clean service function
+import { fetchPropertyById } from "../api/properties";
+
 import {
   MapPin,
   Phone,
@@ -17,20 +20,24 @@ function PropertyDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 🔥 State to track which image is currently selected
+  // State to track which image is currently selected
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const res = await api.get(`/properties/${id}`);
-        setProperty(res.data);
+        setLoading(true); // Always good practice to set loading true at the start
+
+        // 🔥 2. Use your new function! No more 'res.data' parsing needed here.
+        const data = await fetchPropertyById(id);
+        setProperty(data);
       } catch (err) {
         setError("Property not found or server error.");
       } finally {
         setLoading(false);
       }
     };
+
     fetchDetail();
   }, [id]);
 
@@ -40,12 +47,14 @@ function PropertyDetail() {
         Loading details...
       </div>
     );
+
   if (error)
     return (
       <div style={{ textAlign: "center", padding: "100px", color: "red" }}>
         {error}
       </div>
     );
+
   if (!property) return null;
 
   return (

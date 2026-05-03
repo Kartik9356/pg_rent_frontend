@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import api from "../api/api";
 import { useNavigate } from "react-router-dom";
+import { fetchMyProperties, deleteProperty } from "../api/properties"; // 🔥 Modular API imports
 
 function OwnerDashboard() {
   const [properties, setProperties] = useState([]);
@@ -10,10 +10,11 @@ function OwnerDashboard() {
 
   // Fetch properties on load
   useEffect(() => {
-    const fetchMyProperties = async () => {
+    const loadProperties = async () => {
       try {
-        const res = await api.get("/properties/my-properties");
-        setProperties(res.data);
+        // 🔥 Clean API call returning data directly
+        const data = await fetchMyProperties();
+        setProperties(data);
       } catch (err) {
         setError("Failed to load properties. Please try again.");
         console.error(err);
@@ -22,22 +23,21 @@ function OwnerDashboard() {
       }
     };
 
-    fetchMyProperties();
+    loadProperties();
   }, []);
 
-  // 🔥 NEW: Delete Property Function
+  // Delete Property Function
   const handleDelete = async (propertyId) => {
-    // 1. Ask for confirmation so they don't accidentally click it
     if (
       window.confirm(
         "Are you sure you want to permanently delete this listing?",
       )
     ) {
       try {
-        // 2. Call your backend delete route
-        await api.delete(`/properties/${propertyId}`);
+        // 🔥 Clean API call using the specific function
+        await deleteProperty(propertyId);
 
-        // 3. Update the UI instantly by filtering out the deleted property
+        // Update the UI instantly by filtering out the deleted property
         setProperties(properties.filter((prop) => prop._id !== propertyId));
         alert("Property deleted successfully.");
       } catch (err) {
@@ -62,6 +62,7 @@ function OwnerDashboard() {
     );
   }
 
+  // ... (Keep your existing return statement with the UI layout here)
   return (
     <div
       style={{

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import api from "../api/api";
+import { fetchAllProperties } from "../api/properties"; // 🔥 Imported your clean service file!
 import {
   MapPin,
   IndianRupee,
@@ -31,10 +31,10 @@ function Rooms() {
       if (category !== "All") params.category = category;
       if (maxPrice) params.maxPrice = Number(maxPrice);
 
-      // Axios automatically converts this into /properties?city=Pune&category=Flat etc.
-      const res = await api.get("/properties", { params });
+      // 🔥 Clean API call using your new properties.js file
+      const data = await fetchAllProperties(params);
 
-      setProperties(res.data.data || res.data);
+      setProperties(data.data || data);
     } catch (err) {
       console.error("Failed to fetch properties", err);
     } finally {
@@ -44,7 +44,7 @@ function Rooms() {
 
   // Run fetch on initial load
   useEffect(() => {
-    // Optional: If you redirect from homepage with ?city=Pune, you can parse it here
+    // Check if we redirected from the homepage with a city search
     const searchParams = new URLSearchParams(location.search);
     const urlCity = searchParams.get("city");
     if (urlCity) setSearchCity(urlCity);
@@ -60,15 +60,21 @@ function Rooms() {
   };
 
   // Handle Clear Filters
-  const clearFilters = () => {
+  const clearFilters = async () => {
     setSearchCity("");
     setCategory("All");
     setMaxPrice("");
-    // We can't just call fetchProperties() here immediately because state updates are async,
-    // so we pass empty params manually just this once to reset it instantly.
-    api
-      .get("/properties")
-      .then((res) => setProperties(res.data.data || res.data));
+
+    // 🔥 Use the clean API call here as well
+    try {
+      setLoading(true);
+      const data = await fetchAllProperties({}); // Pass empty params to get everything
+      setProperties(data.data || data);
+    } catch (err) {
+      console.error("Failed to clear filters", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -80,6 +86,17 @@ function Rooms() {
         minHeight: "80vh",
       }}
     >
+      {/* HEADER */}
+      <div style={{ marginBottom: "25px" }}>
+        <h1 style={{ margin: "0 0 10px 0", color: "#333", fontSize: "2.2rem" }}>
+          Explore Properties
+        </h1>
+        <p style={{ color: "#666", margin: 0, fontSize: "1.1rem" }}>
+          Find the perfect flat or PG that fits your lifestyle.
+        </p>
+      </div>
+
+      {/* THE PREMIUM SEARCH & FILTER BAR */}
       <div
         style={{
           background: "#fff",
@@ -259,8 +276,6 @@ function Rooms() {
                 gap: "8px",
                 transition: "background 0.3s",
               }}
-              onMouseOver={(e) => (e.target.style.background = "#b8962e")}
-              onMouseOut={(e) => (e.target.style.background = "#d4af37")}
             >
               <Search size={18} /> Search
             </button>
@@ -279,8 +294,6 @@ function Rooms() {
                 cursor: "pointer",
                 transition: "background 0.3s",
               }}
-              onMouseOver={(e) => (e.target.style.background = "#e9ecef")}
-              onMouseOut={(e) => (e.target.style.background = "#f8f9fa")}
             >
               Clear
             </button>
@@ -336,16 +349,6 @@ function Rooms() {
                   transition: "transform 0.2s ease, box-shadow 0.2s ease",
                   cursor: "pointer",
                   border: "1px solid #f4f4f4",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-5px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 10px 25px rgba(0,0,0,0.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 15px rgba(0,0,0,0.05)";
                 }}
               >
                 {/* Image */}
@@ -471,8 +474,6 @@ function Rooms() {
                         fontWeight: "bold",
                         transition: "background 0.2s",
                       }}
-                      onMouseOver={(e) => (e.target.style.background = "#333")}
-                      onMouseOut={(e) => (e.target.style.background = "#111")}
                     >
                       View Details
                     </Link>
