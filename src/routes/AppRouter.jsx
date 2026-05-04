@@ -1,21 +1,23 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom"; // 🔥 Notice we removed BrowserRouter here!
+import { Routes, Route } from "react-router-dom";
 
 // Import Pages
 import Home from "../pages/Home";
 import OwnerDashboard from "../pages/OwnerDashboard";
 import Dashboard from "../pages/Dashboard";
 import AddPropertyForm from "../components/AddPropertyForm";
-
-// Import Protected Route
+import Rooms from "../pages/Rooms";
+import PropertyDetail from "../pages/PropertyDetail";
 import ProtectedRoute from "./ProtectedRouter";
+import EditPropertyForm from "../components/EditPropertyForm";
 import Users from "../components/Users";
-
 
 const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/rooms" element={<Rooms />} />
+      <Route path="/rooms/:id" element={<PropertyDetail />} />
 
       <Route
         path="/owner"
@@ -43,7 +45,14 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
-
+      <Route
+        path="/owner/edit-property/:id"
+        element={
+          <ProtectedRoute role="owner">
+            <EditPropertyForm />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/users"

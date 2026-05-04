@@ -1,3 +1,6 @@
+import React from "react";
+import "../style.css";
+
 function ContactForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -6,12 +9,12 @@ function ContactForm() {
 
   return (
     <section id="contact" className="cta">
-      <h2 style={{fontSize: "xx-large"}}>Schedule a Visit</h2>
-      <p style={{fontSize: "xx-large"}}>Book a visit and explore your future home</p>
-      <br />
+      <h2 className="cta-title">Schedule a Visit</h2>
+      <p className="cta-subtitle">
+        Book a visit and explore your future home
+      </p>
 
       <form className="contact-form" onSubmit={handleSubmit}>
-
         <div className="input-group">
           <input type="text" placeholder="Full Name" required />
         </div>
@@ -51,8 +54,9 @@ function ContactForm() {
           <textarea placeholder="Any Message..." rows="4" />
         </div>
 
-        <button type="submit">Schedule Visit</button>
-
+        <button type="submit" className="submit-btn">
+          Schedule Visit
+        </button>
       </form>
     </section>
   );

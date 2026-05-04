@@ -1,25 +1,29 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api";
 import {
-  Plus,
   MapPin,
-  Home,
+  Building2,
   Trash2,
   UploadCloud,
   Wifi,
-  Building2,
   DollarSign,
   Users,
   Image as ImageIcon,
+  ArrowLeft,
 } from "lucide-react";
 
-function AddPropertyForm() {
+function EditPropertyForm() {
+  const { id } = useParams(); // Get the property ID from the URL
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [error, setError] = useState("");
-  const [images, setImages] = useState([]);
+
+  // We'll track new images they want to upload, and existing images already on the server
+  const [newImages, setNewImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -31,13 +35,11 @@ function AddPropertyForm() {
     latitude: "",
     longitude: "",
     amenities: "",
-    // Flat Specs
     bhkType: "1BHK",
     furnishing: "Fully Furnished",
     rentAmount: "",
     depositAmount: "",
     tenantPreference: "Anyone",
-    // PG Specs
     sharingType: "Single",
     pricePerBed: "",
     depositPerBed: "",
@@ -47,11 +49,52 @@ function AddPropertyForm() {
     genderRestriction: "Boys Only",
   });
 
+  // 🔥 Fetch Existing Data on Load
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const res = await api.get(`/properties/${id}`);
+        const p = res.data;
+
+        setFormData({
+          title: p.title || "",
+          propertyCategory: p.propertyCategory || "Flat",
+          street: p.address?.street || "",
+          city: p.address?.city || "",
+          state: p.address?.state || "",
+          pincode: p.address?.pincode || "",
+          latitude: p.location?.coordinates[1] || "", // Mapbox stores as [long, lat]
+          longitude: p.location?.coordinates[0] || "",
+          amenities: p.generalAmenities?.join(", ") || "",
+          bhkType: p.flatDetails?.bhkType || "1BHK",
+          furnishing: p.flatDetails?.furnishing || "Fully Furnished",
+          rentAmount: p.flatDetails?.rentAmount || "",
+          depositAmount: p.flatDetails?.depositAmount || "",
+          tenantPreference: p.flatDetails?.tenantPreference || "Anyone",
+          sharingType: p.roomConfigurations?.[0]?.sharingType || "Single",
+          pricePerBed: p.roomConfigurations?.[0]?.pricePerBed || "",
+          depositPerBed: p.roomConfigurations?.[0]?.depositPerBed || "",
+          totalBeds: p.roomConfigurations?.[0]?.totalBeds || "",
+          availableBeds: p.roomConfigurations?.[0]?.availableBeds || "",
+          foodIncluded: p.roomConfigurations?.[0]?.foodIncluded || false,
+          genderRestriction:
+            p.roomConfigurations?.[0]?.genderRestriction || "Boys Only",
+        });
+
+        setExistingImages(p.images || []);
+      } catch (err) {
+        setError("Failed to load property data.");
+      } finally {
+        setFetching(false);
+      }
+    };
+    fetchProperty();
+  }, [id]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      // Handle the foodIncluded dropdown boolean conversion
       [name]:
         name === "foodIncluded"
           ? value === "true"
@@ -63,33 +106,24 @@ function AddPropertyForm() {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-
-    // Combine with existing images if total doesn't exceed 5
-    const totalImages = images.length + files.length;
-    if (totalImages > 5) {
-      alert("Max 5 images allowed");
+    if (existingImages.length + newImages.length + files.length > 5) {
+      alert("Max 5 images allowed total.");
       return;
     }
-
-    const newImages = [...images, ...files];
-    setImages(newImages);
-
-    // Create new previews
-    const newPreviews = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages([...previewImages, ...newPreviews]);
+    setNewImages([...newImages, ...files]);
+    setPreviewImages([
+      ...previewImages,
+      ...files.map((f) => URL.createObjectURL(f)),
+    ]);
   };
 
-  const handleRemoveImage = (index) => {
-    const updatedImages = images.filter((_, i) => i !== index);
-    const updatedPreviews = previewImages.filter((_, i) => i !== index);
-
-    // Revoke the URL to avoid memory leaks
+  const handleRemoveNewImage = (index) => {
+    setNewImages(newImages.filter((_, i) => i !== index));
     URL.revokeObjectURL(previewImages[index]);
-
-    setImages(updatedImages);
-    setPreviewImages(updatedPreviews);
+    setPreviewImages(previewImages.filter((_, i) => i !== index));
   };
 
+  // 🔥 Update Submit Logic to use PUT
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -97,10 +131,8 @@ function AddPropertyForm() {
 
     try {
       const submitData = new FormData();
-
       submitData.append("title", formData.title);
       submitData.append("propertyCategory", formData.propertyCategory);
-
       submitData.append(
         "address",
         JSON.stringify({
@@ -110,7 +142,6 @@ function AddPropertyForm() {
           pincode: formData.pincode,
         }),
       );
-
       submitData.append(
         "location",
         JSON.stringify({
@@ -118,7 +149,6 @@ function AddPropertyForm() {
           coordinates: [Number(formData.longitude), Number(formData.latitude)],
         }),
       );
-
       submitData.append(
         "generalAmenities",
         JSON.stringify(formData.amenities.split(",").map((a) => a.trim())),
@@ -132,7 +162,7 @@ function AddPropertyForm() {
             furnishing: formData.furnishing,
             rentAmount: Number(formData.rentAmount),
             depositAmount: Number(formData.depositAmount),
-            tenantPreference: formData.tenantPreference, // Restored
+            tenantPreference: formData.tenantPreference,
           }),
         );
       } else {
@@ -142,38 +172,62 @@ function AddPropertyForm() {
             {
               sharingType: formData.sharingType,
               pricePerBed: Number(formData.pricePerBed),
-              depositPerBed: Number(formData.depositPerBed), // Restored
+              depositPerBed: Number(formData.depositPerBed),
               totalBeds: Number(formData.totalBeds),
-              availableBeds: Number(formData.availableBeds), // Restored
+              availableBeds: Number(formData.availableBeds),
               foodIncluded: formData.foodIncluded,
-              genderRestriction: formData.genderRestriction, // Restored
+              genderRestriction: formData.genderRestriction,
             },
           ]),
         );
       }
 
-      images.forEach((file) => submitData.append("images", file));
+      // If they uploaded new images, send them to the backend
+      newImages.forEach((file) => submitData.append("images", file));
 
-      await api.post("/properties", submitData, {
+      // Call the PUT route instead of POST
+      await api.put(`/properties/${id}`, submitData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      alert("Property Uploaded 🚀");
+      alert("Property Updated Successfully! 🚀");
       navigate("/owner");
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Upload failed. Please check your data.",
-      );
+      setError(err.response?.data?.message || "Update failed.");
     } finally {
       setLoading(false);
     }
   };
 
+  if (fetching)
+    return (
+      <div style={{ textAlign: "center", padding: "100px" }}>
+        Loading property data...
+      </div>
+    );
+
+  // The rest of this is identical to your AddPropertyForm UI!
   return (
     <div className="container">
       <div className="card">
-        <h2 className="title">List Your Property For Rent</h2>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "1rem",
+            color: "#555",
+            marginBottom: "20px",
+          }}
+        >
+          <ArrowLeft size={18} /> Back to Dashboard
+        </button>
 
+        <h2 className="title">Edit Property</h2>
         {error && <div className="error">{error}</div>}
 
         <form onSubmit={handleSubmit} className="form">
@@ -185,20 +239,24 @@ function AddPropertyForm() {
               <label>Property Title</label>
               <input
                 name="title"
-                placeholder="Ex. Luxury 2BHK in Mumbai"
+                value={formData.title}
                 onChange={handleChange}
                 className="input"
                 required
               />
             </div>
           </div>
+
           <div className="row">
             <div className="input-group">
               <label>Property Type</label>
+              {/* Disabled because changing category mid-way can break the schema */}
               <select
                 name="propertyCategory"
-                onChange={handleChange}
+                value={formData.propertyCategory}
+                disabled
                 className="input"
+                style={{ background: "#eee", cursor: "not-allowed" }}
               >
                 <option value="Flat">🏠 Flat</option>
                 <option value="PG">🏢 PG / Hostel</option>
@@ -210,6 +268,7 @@ function AddPropertyForm() {
                   <label>BHK Type</label>
                   <select
                     name="bhkType"
+                    value={formData.bhkType}
                     className="input"
                     onChange={handleChange}
                   >
@@ -223,6 +282,7 @@ function AddPropertyForm() {
                   <label>Furnishing</label>
                   <select
                     name="furnishing"
+                    value={formData.furnishing}
                     className="input"
                     onChange={handleChange}
                   >
@@ -231,11 +291,11 @@ function AddPropertyForm() {
                     <option>Unfurnished</option>
                   </select>
                 </div>
-                {/* RESTORED MISSING FIELD */}
                 <div className="input-group">
                   <label>Tenant Preference</label>
                   <select
                     name="tenantPreference"
+                    value={formData.tenantPreference}
                     className="input"
                     onChange={handleChange}
                   >
@@ -252,22 +312,21 @@ function AddPropertyForm() {
             <MapPin size={20} /> Location Details
           </h4>
           <div className="input-group full">
-            <label>Street Address</label>
+            <label>Street</label>
             <input
               name="street"
-              placeholder="Street"
+              value={formData.street}
               className="input"
               onChange={handleChange}
               required
             />
           </div>
-
           <div className="row">
             <div className="input-group">
               <label>City</label>
               <input
                 name="city"
-                placeholder="City"
+                value={formData.city}
                 className="input"
                 onChange={handleChange}
                 required
@@ -277,7 +336,7 @@ function AddPropertyForm() {
               <label>State</label>
               <input
                 name="state"
-                placeholder="State"
+                value={formData.state}
                 className="input"
                 onChange={handleChange}
                 required
@@ -287,14 +346,13 @@ function AddPropertyForm() {
               <label>Pincode</label>
               <input
                 name="pincode"
-                placeholder="Pincode"
+                value={formData.pincode}
                 className="input"
                 onChange={handleChange}
                 required
               />
             </div>
           </div>
-
           <div className="row">
             <div className="input-group">
               <label>Latitude</label>
@@ -302,7 +360,7 @@ function AddPropertyForm() {
                 type="number"
                 step="any"
                 name="latitude"
-                placeholder="Ex. 19.076"
+                value={formData.latitude}
                 className="input"
                 onChange={handleChange}
                 required
@@ -314,7 +372,7 @@ function AddPropertyForm() {
                 type="number"
                 step="any"
                 name="longitude"
-                placeholder="Ex. 72.877"
+                value={formData.longitude}
                 className="input"
                 onChange={handleChange}
                 required
@@ -333,7 +391,7 @@ function AddPropertyForm() {
                   <input
                     type="number"
                     name="rentAmount"
-                    placeholder="Ex. 25000"
+                    value={formData.rentAmount}
                     className="input"
                     onChange={handleChange}
                     required
@@ -344,7 +402,7 @@ function AddPropertyForm() {
                   <input
                     type="number"
                     name="depositAmount"
-                    placeholder="Ex. 50000"
+                    value={formData.depositAmount}
                     className="input"
                     onChange={handleChange}
                     required
@@ -360,11 +418,11 @@ function AddPropertyForm() {
                 <Users size={20} /> PG Details
               </h4>
               <div className="row">
-                {/* RESTORED MISSING FIELD */}
                 <div className="input-group">
                   <label>Gender</label>
                   <select
                     name="genderRestriction"
+                    value={formData.genderRestriction}
                     className="input"
                     onChange={handleChange}
                   >
@@ -377,6 +435,7 @@ function AddPropertyForm() {
                   <label>Sharing Type</label>
                   <select
                     name="sharingType"
+                    value={formData.sharingType}
                     className="input"
                     onChange={handleChange}
                   >
@@ -389,23 +448,22 @@ function AddPropertyForm() {
               </div>
               <div className="row">
                 <div className="input-group">
-                  <label>Price per Bed (₹)</label>
+                  <label>Price per Bed</label>
                   <input
                     type="number"
                     name="pricePerBed"
-                    placeholder="Rent per bed"
+                    value={formData.pricePerBed}
                     className="input"
                     onChange={handleChange}
                     required
                   />
                 </div>
-                {/* RESTORED MISSING FIELD */}
                 <div className="input-group">
-                  <label>Deposit per Bed (₹)</label>
+                  <label>Deposit per Bed</label>
                   <input
                     type="number"
                     name="depositPerBed"
-                    placeholder="Deposit per bed"
+                    value={formData.depositPerBed}
                     className="input"
                     onChange={handleChange}
                     required
@@ -418,19 +476,18 @@ function AddPropertyForm() {
                   <input
                     type="number"
                     name="totalBeds"
-                    placeholder="Capacity"
+                    value={formData.totalBeds}
                     className="input"
                     onChange={handleChange}
                     required
                   />
                 </div>
-                {/* RESTORED MISSING FIELD */}
                 <div className="input-group">
                   <label>Available Beds</label>
                   <input
                     type="number"
                     name="availableBeds"
-                    placeholder="Available now"
+                    value={formData.availableBeds}
                     className="input"
                     onChange={handleChange}
                     required
@@ -440,6 +497,7 @@ function AddPropertyForm() {
                   <label>Food Included</label>
                   <select
                     name="foodIncluded"
+                    value={formData.foodIncluded}
                     className="input"
                     onChange={handleChange}
                   >
@@ -455,19 +513,37 @@ function AddPropertyForm() {
             <Wifi size={20} /> Amenities
           </h4>
           <div className="input-group full">
-            <label>Amenities (Comma separated)</label>
+            <label>Amenities</label>
             <input
               name="amenities"
-              placeholder="WiFi, AC, TV, Fridge, Gym..."
+              value={formData.amenities}
               className="input"
               onChange={handleChange}
             />
           </div>
 
-          <h4><ImageIcon size={20} /> Property Images</h4>
+          <h4>
+            <ImageIcon size={20} /> Property Images
+          </h4>
+
+          {/* Show Existing Server Images */}
+          {existingImages.length > 0 && (
+            <div style={{ marginBottom: "15px" }}>
+              <label>Current Images on Server:</label>
+              <div className="preview-grid">
+                {existingImages.map((src, i) => (
+                  <div key={i} className="preview-card">
+                    <img src={src} alt="existing" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Add New Images */}
           <div
             className="upload-box"
-            onClick={() => document.getElementById('file-upload').click()}
+            onClick={() => document.getElementById("file-upload").click()}
           >
             <UploadCloud size={32} />
             <input
@@ -476,26 +552,24 @@ function AddPropertyForm() {
               multiple
               accept="image/*"
               onChange={handleFileChange}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
             />
-            <p>Click to upload</p>
-            <span>Max 5 images allowed (JPG, PNG)</span>
+            <p>Click to add more images</p>
           </div>
 
-          {/* Preview */}
+          {/* Show New Image Previews */}
           {previewImages.length > 0 && (
             <div className="preview-grid">
               {previewImages.map((src, i) => (
                 <div key={i} className="preview-card">
-                  <img src={src} alt={`preview-${i}`} />
+                  <img src={src} alt={`new-preview-${i}`} />
                   <button
                     type="button"
                     className="remove-img-btn"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleRemoveImage(i);
+                      handleRemoveNewImage(i);
                     }}
-                    title="Remove image"
                   >
                     <Trash2 size={14} />
                   </button>
@@ -505,7 +579,7 @@ function AddPropertyForm() {
           )}
 
           <button className="btn" disabled={loading} type="submit">
-            {loading ? "Uploading..." : "Publish Property"}
+            {loading ? "Saving Changes..." : "Save Updates"}
           </button>
         </form>
       </div>
@@ -513,4 +587,4 @@ function AddPropertyForm() {
   );
 }
 
-export default AddPropertyForm;
+export default EditPropertyForm;
