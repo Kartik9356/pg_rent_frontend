@@ -533,7 +533,6 @@ function PropertyDetail() {
     </div>
   );
 }
-
 const DetailBox = ({ icon, label, value }) => (
   <div
     style={{
