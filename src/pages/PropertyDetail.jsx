@@ -483,44 +483,23 @@ function PropertyDetail() {
                   <strong>{property.ownerId?.name || "Verified Owner"}</strong>
                 </p>
 
-                {isLoggedIn ? (
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={buttonStyle}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.background = "#1ebe5d";
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.background = "#25D366";
-                      e.currentTarget.style.transform = "translateY(0)";
-                    }}
-                  >
-                    <MessageCircle size={22} /> Chat on WhatsApp
-                  </a>
-                ) : (
-                  // 🔥 4. Update the onClick to open the Modal instead of navigating!
-                  <button
-                    onClick={() => setShowModal(true)}
-                    style={{
-                      ...buttonStyle,
-                      background: "#111",
-                      boxShadow: "0 4px 15px rgba(0,0,0,0.15)",
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.background = "#333";
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.background = "#111";
-                      e.currentTarget.style.transform = "translateY(0)";
-                    }}
-                  >
-                    <User size={20} /> Login to Contact Owner
-                  </button>
-                )}
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={buttonStyle}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = "#1ebe5d";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = "#25D366";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <MessageCircle size={22} /> Chat on WhatsApp
+                </a>
+
                 <p
                   style={{
                     textAlign: "center",
