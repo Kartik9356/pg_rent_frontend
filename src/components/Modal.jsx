@@ -11,7 +11,8 @@ function Modal({ type, closeModal }) {
     name: "",
     email: "",
     phone: "",
-    role: "seeker",
+    // 🔥 1. CHANGED DEFAULT ROLE FROM "seeker" TO "owner"
+    role: "owner",
     method: "email",
     otp: "",
   });
@@ -19,8 +20,8 @@ function Modal({ type, closeModal }) {
   const navigate = useNavigate();
 
   // 🔥 SHOW MESSAGE
-  const showMessage = (text, type = "success") => {
-    setMessage({ text, type });
+  const showMessage = (text, messageType = "success") => {
+    setMessage({ text, type: messageType });
     setTimeout(() => {
       setMessage({ text: "", type: "" });
     }, 3000);
@@ -50,7 +51,7 @@ function Modal({ type, closeModal }) {
     } catch (err) {
       showMessage(
         err.response?.data?.message || "Something went wrong",
-        "error"
+        "error",
       );
     } finally {
       setLoading(false);
@@ -79,10 +80,7 @@ function Modal({ type, closeModal }) {
         else navigate("/");
       }, 1000);
     } catch (err) {
-      showMessage(
-        err.response?.data?.message || "Invalid OTP",
-        "error"
-      );
+      showMessage(err.response?.data?.message || "Invalid OTP", "error");
     } finally {
       setLoading(false);
     }
@@ -91,12 +89,9 @@ function Modal({ type, closeModal }) {
   return (
     <div className="modal-overlay">
       <div className="modal-box">
-
         {/* MESSAGE */}
         {message.text && (
-          <div className={`toast ${message.type}`}>
-            {message.text}
-          </div>
+          <div className={`toast ${message.type}`}>{message.text}</div>
         )}
 
         {/* HEADER */}
@@ -105,10 +100,13 @@ function Modal({ type, closeModal }) {
             {step === "otp"
               ? "Enter OTP"
               : type === "login"
-              ? "Login"
-              : "Signup"}
+                ? "Owner/Admin Login" // 🔥 Updated Title
+                : "Owner Signup"}{" "}
+            {/* 🔥 Updated Title */}
           </h2>
-          <button onClick={closeModal} className="close-btn">✖</button>
+          <button onClick={closeModal} className="close-btn">
+            ✖
+          </button>
         </div>
 
         {/* FORM */}
@@ -120,28 +118,23 @@ function Modal({ type, closeModal }) {
                   type="text"
                   placeholder="Full Name"
                   value={form.name}
-                  onChange={(e) =>
-                    setForm({ ...form, name: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
                 />
 
                 <input
                   type="text"
                   placeholder="Phone Number"
                   value={form.phone}
-                  onChange={(e) =>
-                    setForm({ ...form, phone: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 />
 
                 <select
                   value={form.role}
-                  onChange={(e) =>
-                    setForm({ ...form, role: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, role: e.target.value })}
                 >
-                  <option value="seeker">Seeker</option>
-                  <option value="owner">Owner</option>
+                  {/* 🔥 2. COMMENTED OUT THE SEEKER OPTION */}
+                  {/* <option value="seeker">Seeker</option> */}
+                  <option value="owner">Owner (List a Property)</option>
                 </select>
               </>
             )}
@@ -150,9 +143,7 @@ function Modal({ type, closeModal }) {
               type="email"
               placeholder="Email Address"
               value={form.email}
-              onChange={(e) =>
-                setForm({ ...form, email: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
 
             <div className="radio-group">
@@ -161,9 +152,7 @@ function Modal({ type, closeModal }) {
                   type="radio"
                   value="email"
                   checked={form.method === "email"}
-                  onChange={(e) =>
-                    setForm({ ...form, method: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, method: e.target.value })}
                 />
                 Email OTP
               </label>
@@ -173,9 +162,7 @@ function Modal({ type, closeModal }) {
                   type="radio"
                   value="sms"
                   checked={form.method === "sms"}
-                  onChange={(e) =>
-                    setForm({ ...form, method: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, method: e.target.value })}
                 />
                 SMS OTP
               </label>
@@ -188,6 +175,25 @@ function Modal({ type, closeModal }) {
             >
               {loading ? <span className="loader"></span> : "Send OTP"}
             </button>
+
+            {/* Quick toggle between login and signup for owners */}
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "15px",
+                fontSize: "0.9rem",
+                cursor: "pointer",
+                color: "#007bff",
+              }}
+              onClick={() => {
+                // Note: You might need to add a setType function in props to toggle this dynamically
+                alert("Toggle between login/signup logic here if needed!");
+              }}
+            >
+              {type === "login"
+                ? "New Owner? Sign Up Here"
+                : "Already an Owner? Login"}
+            </p>
           </>
         )}
 
@@ -206,9 +212,7 @@ function Modal({ type, closeModal }) {
               placeholder="Enter OTP"
               maxLength={6}
               value={form.otp}
-              onChange={(e) =>
-                setForm({ ...form, otp: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, otp: e.target.value })}
             />
 
             <button
@@ -219,10 +223,7 @@ function Modal({ type, closeModal }) {
               {loading ? <span className="loader"></span> : "Verify & Login"}
             </button>
 
-            <button
-              onClick={() => setStep("form")}
-              className="secondary-btn"
-            >
+            <button onClick={() => setStep("form")} className="secondary-btn">
               Go Back
             </button>
           </>

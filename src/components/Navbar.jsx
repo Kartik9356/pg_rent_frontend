@@ -54,7 +54,7 @@ function Navbar({ openLogin, openSignup, user, setUser }) {
 
       <div className="auth-buttons">
         {user ? (
-          // --- UI FOR LOGGED IN USERS ---
+          // --- UI FOR LOGGED IN USERS (OWNERS & ADMINS) ---
           <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
             <span style={{ fontWeight: "bold" }}>Hi, {user.name}!</span>
 
@@ -69,11 +69,8 @@ function Navbar({ openLogin, openSignup, user, setUser }) {
                 Admin Panel
               </Link>
             )}
-            {user.role === "seeker" && (
-              <Link to="/profile" className="dash-btn">
-                My Profile
-              </Link>
-            )}
+
+            {/* 🔥 NOTE: The "seeker" role block was removed because seekers don't log in anymore! */}
 
             <button className="logout-btn" onClick={handleLogout}>
               Logout
@@ -82,11 +79,12 @@ function Navbar({ openLogin, openSignup, user, setUser }) {
         ) : (
           // --- UI FOR GUESTS ---
           <>
+            {/* 🔥 NOTE: Text changed to explicitly target Owners and Admins */}
             <button className="login-btn" onClick={openLogin}>
-              Login
+              Owner Login
             </button>
             <button className="signup-btn" onClick={openSignup}>
-              Signup
+              List Property
             </button>
           </>
         )}
