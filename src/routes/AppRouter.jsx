@@ -52,6 +52,14 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/edit-property/:id"
+        element={
+          <ProtectedRoute role="admin">
+            <EditPropertyForm />
+          </ProtectedRoute>
+        }
+      />
 
       <Route path="*" element={<h2>404 - Page Not Found</h2>} />
     </Routes>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchPropertyById } from "../api/properties";
-// 🔥 1. Import your Modal component here
 import Modal from "../components/Modal";
+const adminPhone = import.meta.env.VITE_ADMIN_WHATSAPP_NUMBER || "919876543210";
+const currentUrl = window.location.href;
+
 import {
   MapPin,
   CheckCircle2,
@@ -77,9 +79,14 @@ function PropertyDetail() {
 
   // Authentication & Action Logic
   const isLoggedIn = !!localStorage.getItem("user");
-  const whatsappUrl = `https://wa.me/91${property?.ownerId?.phone}?text=${encodeURIComponent(
-    `Hi! I saw your property "${property?.title}" listed on RentMate. Is it still available for a visit?`,
-  )}`;
+  const whatsappMessage = `Hi! I am interested in this property.
+  
+        *Owner Name:* ${property?.ownerId?.name || "Verified Owner"}
+        *Property Name:* ${property?.title}
+        *Property ID:* ${property?._id}
+        *Property URL:* ${currentUrl}`;
+
+  const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(whatsappMessage)}`;
 
   const buttonStyle = {
     width: "100%",
@@ -100,7 +107,6 @@ function PropertyDetail() {
     boxSizing: "border-box",
     boxShadow: "0 4px 15px rgba(37, 211, 102, 0.2)",
   };
-
   return (
     <div
       style={{

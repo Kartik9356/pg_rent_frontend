@@ -1,7 +1,9 @@
 import React from "react";
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, XCircle, Edit } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // 🔥 Added useNavigate
 
 const PropertyTable = ({ properties = [], changeStatus }) => {
+  const navigate = useNavigate(); 
   // Safety check to prevent .map() crashes
   if (!Array.isArray(properties)) {
     return (
@@ -73,6 +75,22 @@ const PropertyTable = ({ properties = [], changeStatus }) => {
                 </span>
               </td>
               <td style={{ padding: "15px", display: "flex", gap: "10px" }}>
+                <button
+                  onClick={() => navigate(`/admin/edit-property/${prop._id}`)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    padding: "6px 12px",
+                    background: "#007bff",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Edit size={16} /> Edit
+                </button>
                 {prop.status !== "Approved" && (
                   <button
                     onClick={() => changeStatus(prop._id, "Approved")}
