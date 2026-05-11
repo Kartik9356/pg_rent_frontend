@@ -4,6 +4,7 @@ import AppRouter from "./routes/AppRouter";
 import Navbar from "./components/Navbar";
 import Modal from "./components/Modal";
 import api from "./api/api";
+import Footer from "./components/Footer";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -45,6 +46,9 @@ function App() {
         )}
 
         <AppRouter />
+        {/* ✅ Footer on all pages */}
+        <Footer />
+
       </div>
     </Router>
   );
