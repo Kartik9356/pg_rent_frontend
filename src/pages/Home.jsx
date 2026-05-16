@@ -44,7 +44,7 @@ function Home() {
         </>
       )}
 
-      <Footer />
+
     </>
   );
 }

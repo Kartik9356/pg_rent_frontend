@@ -48,7 +48,8 @@ function Navbar({ openLogin, openSignup, user, setUser }) {
           <Link to="/rooms">Rooms</Link>
         </li>
         <li>
-          <a href="#contact">Contact</a>
+          <Link to="/contact">Contact</Link>
+          {/* <a href="#contact">Contact</a> */}
         </li>
       </ul>
 

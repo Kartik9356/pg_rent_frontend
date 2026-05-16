@@ -6,11 +6,13 @@ import Cards from "../components/Cards";
 import PropertyTable from "../components/PropertyTable";
 import UserTable from "../components/PropertyTable";
 import "../dashboard.css";
+import VisitorsTable from "../components/VisitorsTable";
 
 import {
   fetchAdminProperties,
   fetchAdminUsers,
   fetchAdminReports,
+  fetchVisitors,
   updateAdminPropertyStatus,
 } from "../api/admin";
 
@@ -45,6 +47,8 @@ const Dashboard = () => {
         responseData = await fetchAdminUsers(page, 10, searchQuery);
       } else if (activeTab === "reports") {
         responseData = await fetchAdminReports(page, 10, searchQuery);
+      } else if (activeTab === "visitors") {
+        responseData = await fetchVisitors();
       } else if (["Pending", "Approved", "Rejected"].includes(activeTab)) {
         responseData = await fetchAdminProperties(
           activeTab,
@@ -117,7 +121,7 @@ const Dashboard = () => {
             <div className="header-bar">
               <h2>
                 {activeTab}{" "}
-                {activeTab === "users" || activeTab === "reports"
+                {activeTab === "users" || activeTab === "visitors" || activeTab === "reports"
                   ? ""
                   : "Properties"}
               </h2>
@@ -153,6 +157,9 @@ const Dashboard = () => {
 
                 {activeTab === "reports" && (
                   <p>Reports Table Goes Here</p>
+                )}
+                {activeTab === "visitors" && (
+                  <VisitorsTable visitors={data} />
                 )}
               </>
             )}

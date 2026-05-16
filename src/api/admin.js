@@ -34,3 +34,9 @@ export const fetchAdminReports = async (page = 1, limit = 10, search = "") => {
   });
   return response.data;
 };
+// Fetch Visitors for the Admin Panel
+export const fetchVisitors = async () => {
+  const response = await api.get("/contact");
+
+  return response.data;
+};

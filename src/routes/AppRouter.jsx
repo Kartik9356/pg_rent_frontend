@@ -10,6 +10,7 @@ import Rooms from "../pages/Rooms";
 import PropertyDetail from "../pages/PropertyDetail";
 import ProtectedRoute from "./ProtectedRouter";
 import EditPropertyForm from "../components/EditPropertyForm";
+import Contact from "../pages/Contact";
 import Users from "../components/Users";
 
 const AppRouter = () => {
@@ -62,6 +63,10 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/users" element={<Users />} />
+
 
       <Route path="*" element={<h2>404 - Page Not Found</h2>} />
     </Routes>

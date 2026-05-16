@@ -1,29 +1,117 @@
+/* ================= SIDEBAR ================= */
+
 .sidebar {
-  width: 220px;
-  height: 100vh;
-  background: linear-gradient(180deg, #4b2e2e, #2e1b1b);
-  color: white;
-  padding: 20px 0;
+  width: 250px;
+
+  /* Navbar height space */
+  top: 80px;
+
+  /* Footer space */
+  bottom: 20px;
+
   position: fixed;
+  left: 0;
+
+  background: linear-gradient(to bottom, #2b0f0f, #4a1f1f);
+
+  color: white;
+
+  padding: 20px 12px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  box-sizing: border-box;
+
+  z-index: 1000;
+
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
 }
+
+/* ================= SCROLLBAR ================= */
+
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+/* ================= TITLE ================= */
 
 .sidebar h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
 }
 
-.sidebar a {
-  display: block;
-  padding: 12px 20px;
+/* ================= LINKS ================= */
+
+.sidebar a,
+.sidebar button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+
+  padding: 12px 14px;
+  margin-bottom: 10px;
+
   color: #ddd;
   text-decoration: none;
-  border-left: 3px solid transparent;
-  transition: 0.3s;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  font-size: 10px;
+  font-weight: 500;
+
+  transition: all 0.3s ease;
+
+  box-sizing: border-box;
 }
 
+/* Hover */
+
 .sidebar a:hover,
-.sidebar a.active {
-  background: rgba(255,255,255,0.08);
-  border-left: 3px solid #d4af37;
-  color: #fff;
+.sidebar button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  transform: translateX(3px);
+}
+
+/* Active */
+
+.sidebar a.active,
+.sidebar button.active {
+  background: #d4af37;
+  color: #2b0f0f;
+  font-weight: 700;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+
+  .sidebar {
+    width: 100%;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    border-radius: 0;
+  }
 }

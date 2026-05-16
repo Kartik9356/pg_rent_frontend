@@ -108,6 +108,21 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         >
           🚩 Fraud Reports
         </button>
+        <button
+          className={activeTab === "visitors" ? "active" : ""}
+          onClick={() => setActiveTab("visitors")}
+          style={{
+            padding: "15px",
+            background: activeTab === "visitors" ? "#555" : "transparent",
+            color: "white",
+            border: "none",
+            textAlign: "left",
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
+          🧍 Visitors
+        </button>
       </div>
     </div>
   );
