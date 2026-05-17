@@ -48,7 +48,8 @@ function Navbar({ openLogin, openSignup, user, setUser }) {
           <Link to="/rooms">Rooms</Link>
         </li>
         <li>
-          <a href="/contact">Contact</a>
+          <Link to="/contact">Contact</Link>
+          {/* <a href="#contact">Contact</a> */}
         </li>
       </ul>
 
@@ -56,7 +57,10 @@ function Navbar({ openLogin, openSignup, user, setUser }) {
         {user ? (
           // --- UI FOR LOGGED IN USERS (OWNERS & ADMINS) ---
           <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-            <span style={{ fontWeight: "bold" }}>Hi, {user.name}!</span>
+            <span style={{ fontWeight: "bold" }}>
+              {/*Hi, {user.name.split(" ")[0]}! */}
+              Hi, {user?.name?.split(" ")[0] || "User"}!
+            </span>
 
             {/* Smart Routing based on User Role */}
             {user.role === "owner" && (

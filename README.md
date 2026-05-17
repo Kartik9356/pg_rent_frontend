@@ -18,7 +18,7 @@ Plaintext
 src/
 ├── assets/           # Static files like images, icons, and the global index.css
 ├── components/       # Reusable UI parts (e.g., Navbar.jsx, PropertyCard.jsx, Buttons)
-├── pages/            # Main page views (e.g., Home.jsx, Login.jsx, PropertyDetails.jsx)
+├── pages/            # Main page views (e.g., Home.jsx, Login.jsx, s.jsx)
 ├── context/          # React Context files for global state (e.g., AuthContext.jsx)
 ├── services/         # Files connecting to the backend API (e.g., api.js)
 ├── App.jsx           # Main routing configuration

@@ -57,7 +57,7 @@ function Footer() {
 
       {/* BOTTOM */}
       <div className="footer-bottom">
-        <p>© 2026 PG Rent • Designed with ❤️</p>
+        <p>© 2026 Innovia Technology Ltd. All Rights Reserved.</p>
       </div>
 
     </footer>

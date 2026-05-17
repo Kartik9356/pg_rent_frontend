@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchMyProperties, deleteProperty } from "../api/properties"; // 🔥 Modular API imports
+import "../style.css";
 
 function OwnerDashboard() {
   const [properties, setProperties] = useState([]);
@@ -8,7 +8,6 @@ function OwnerDashboard() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Fetch properties on load
   useEffect(() => {
     const loadProperties = async () => {
       try {
@@ -26,18 +25,10 @@ function OwnerDashboard() {
     loadProperties();
   }, []);
 
-  // Delete Property Function
   const handleDelete = async (propertyId) => {
-    if (
-      window.confirm(
-        "Are you sure you want to permanently delete this listing?",
-      )
-    ) {
+    if (window.confirm("Are you sure you want to permanently delete this listing?")) {
       try {
-        // 🔥 Clean API call using the specific function
-        await deleteProperty(propertyId);
-
-        // Update the UI instantly by filtering out the deleted property
+        await api.delete(`/properties/${propertyId}`);
         setProperties(properties.filter((prop) => prop._id !== propertyId));
         alert("Property deleted successfully.");
       } catch (err) {
@@ -47,201 +38,85 @@ function OwnerDashboard() {
   };
 
   if (loading) {
-    return (
-      <div style={{ padding: "4rem", textAlign: "center", fontSize: "1.2rem" }}>
-        Loading your dashboard...
-      </div>
-    );
+    return <div className="loading">Loading your dashboard...</div>;
   }
 
   if (error) {
-    return (
-      <div style={{ padding: "4rem", color: "red", textAlign: "center" }}>
-        {error}
-      </div>
-    );
+    return <div className="error">{error}</div>;
   }
 
   // ... (Keep your existing return statement with the UI layout here)
   return (
-    <div
-      style={{
-        padding: "2rem",
-        maxWidth: "1200px",
-        margin: "0 auto",
-        minHeight: "70vh",
-      }}
-    >
-      {/* Dashboard Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "2rem",
-          paddingBottom: "1rem",
-          borderBottom: "2px solid #eaeaea",
-        }}
-      >
-        <h2 style={{ margin: 0 }}>My Dashboard</h2>
-        <button
-          style={{
-            padding: "10px 20px",
-            background: "#d4af37",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
-          onClick={() => navigate("/owner/add-property")}
-        >
+    <div className="dashboard-container">
+
+      <div className="dashboard-header">
+        <h2 className="dashboard-title">My Dashboard</h2>
+        <button className="add-btn" onClick={() => navigate("/owner/add-property")}>
           + Add New Property
         </button>
       </div>
 
-      {/* Conditional Rendering: Empty State vs Table */}
       {properties.length === 0 ? (
-        // --- ENHANCED EMPTY STATE ---
-        <div
-          style={{
-            textAlign: "center",
-            padding: "4rem 2rem",
-            background: "#fdfdfd",
-            borderRadius: "12px",
-            border: "1px dashed #ccc",
-          }}
-        >
-          <h3 style={{ color: "#555" }}>
-            You haven't listed any properties yet!
-          </h3>
-          <p style={{ color: "#777", marginBottom: "2rem" }}>
+        <div className="empty-state">
+          <h3 className="empty-title">You haven't listed any properties yet!</h3>
+          <p className="empty-text">
             Start reaching seekers by creating your first listing today.
           </p>
           <button
-            style={{
-              padding: "12px 24px",
-              fontSize: "1.1rem",
-              background: "#333",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
+            className="empty-btn"
             onClick={() => navigate("/owner/add-property")}
           >
             Create Your First Listing
           </button>
         </div>
       ) : (
-        // --- POPULATED TABLE STATE ---
-        <div
-          style={{
-            overflowX: "auto",
-            background: "white",
-            borderRadius: "8px",
-            boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-          }}
-        >
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              textAlign: "left",
-            }}
-          >
-            <thead>
-              <tr
-                style={{
-                  background: "#f8f9fa",
-                  borderBottom: "2px solid #ddd",
-                }}
-              >
-                <th style={{ padding: "15px" }}>Title</th>
-                <th style={{ padding: "15px" }}>Category</th>
-                <th style={{ padding: "15px" }}>Status</th>
-                <th style={{ padding: "15px", textAlign: "right" }}>Actions</th>
+        <div className="table-wrapper">
+          <table className="dashboard-table">
+
+            <thead className="table-head">
+              <tr>
+                <th className="th">Title</th>
+                <th className="th">Category</th>
+                <th className="th">Status</th>
+                <th className="th td-actions">Actions</th>
               </tr>
             </thead>
+
             <tbody>
               {properties.map((prop) => (
-                <tr
-                  key={prop._id}
-                  style={{
-                    borderBottom: "1px solid #eee",
-                    transition: "background 0.2s",
-                  }}
-                >
-                  <td style={{ padding: "15px", fontWeight: "500" }}>
-                    {prop.title}
-                  </td>
-                  <td style={{ padding: "15px", color: "#666" }}>
-                    {prop.propertyCategory}
-                  </td>
-                  <td style={{ padding: "15px" }}>
+                <tr key={prop._id} className="table-row">
+
+                  <td className="td td-title">{prop.title}</td>
+                  <td className="td td-category">{prop.propertyCategory}</td>
+
+                  <td className="td">
                     <span
-                      style={{
-                        padding: "6px 12px",
-                        borderRadius: "20px",
-                        fontSize: "0.85rem",
-                        fontWeight: "bold",
-                        background:
-                          prop.status === "Approved"
-                            ? "#d4edda"
-                            : prop.status === "Pending"
-                              ? "#fff3cd"
-                              : "#f8d7da",
-                        color:
-                          prop.status === "Approved"
-                            ? "#155724"
-                            : prop.status === "Pending"
-                              ? "#856404"
-                              : "#721c24",
-                      }}
+                      className={`status-badge ${prop.status === "Approved"
+                        ? "status-approved"
+                        : prop.status === "Pending"
+                          ? "status-pending"
+                          : "status-rejected"
+                        }`}
                     >
                       {prop.status}
                     </span>
                   </td>
-                  <td style={{ padding: "15px", textAlign: "right" }}>
+
+                  <td className="td td-actions">
+                    <button className="edit-btn">Edit</button>
+
                     <button
-                      onClick={() =>
-                        navigate(`/owner/edit-property/${prop._id}`)
-                      }
-                      style={{
-                        marginRight: "10px",
-                        padding: "6px 12px",
-                        background: "#e2e6ea",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        transition: "background 0.3s",
-                      }}
-                      onMouseOver={(e) =>
-                        (e.target.style.background = "#d6d8db")
-                      }
-                      onMouseOut={(e) =>
-                        (e.target.style.background = "#e2e6ea")
-                      }
-                    >
-                      Edit
-                    </button>
-                    <button
+                      className="delete-btn"
                       onClick={() => handleDelete(prop._id)}
-                      style={{
-                        padding: "6px 12px",
-                        background: "#dc3545",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
                     >
                       Delete
                     </button>
                   </td>
+
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
       )}

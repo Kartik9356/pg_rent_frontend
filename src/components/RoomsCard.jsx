@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 
-function RoomsCard({ title, price, rating, images }) {
+function RoomsCard({ _id, title, price, rating, images }) {
     const navigate = useNavigate();
     return (
 

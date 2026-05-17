@@ -1,10 +1,13 @@
 import React from "react";
-import "../sidebar.css"; // Ensure your CSS handles the .active class
+import { NavLink } from "react-router-dom";
+import "../sidebar.css";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
   return (
     <div className="sidebar">
-      <h2 style={{ color: "white", textAlign: "center", marginBottom: "30px" }}>
+      <h2>Room Buddy</h2>
+
+      <h2 style={{ color: "white", textAlign: "center", marginBottom: "30px", marginTop: "20px" }}>
         Admin Panel
       </h2>
 
@@ -104,6 +107,21 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           }}
         >
           🚩 Fraud Reports
+        </button>
+        <button
+          className={activeTab === "visitors" ? "active" : ""}
+          onClick={() => setActiveTab("visitors")}
+          style={{
+            padding: "15px",
+            background: activeTab === "visitors" ? "#555" : "transparent",
+            color: "white",
+            border: "none",
+            textAlign: "left",
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
+          🧍 Visitors
         </button>
       </div>
     </div>

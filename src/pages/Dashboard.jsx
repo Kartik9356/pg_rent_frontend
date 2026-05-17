@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
+import api from "../api/api";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import Cards from "../components/Cards";
 import PropertyTable from "../components/PropertyTable";
-import UserTable from "../components/UserTable";
-import ReportTable from "../components/ReportTable"; // 🔥 Add this line!
+import UserTable from "../components/PropertyTable";
 import "../dashboard.css";
+import VisitorsTable from "../components/VisitorsTable";
 
-// Your API helper functions
 import {
   fetchAdminProperties,
   fetchAdminUsers,
   fetchAdminReports,
+  fetchVisitors,
   updateAdminPropertyStatus,
 } from "../api/admin";
 
@@ -35,7 +36,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, page, searchQuery]);
 
   const fetchData = async () => {
@@ -47,26 +47,19 @@ const Dashboard = () => {
         responseData = await fetchAdminUsers(page, 10, searchQuery);
       } else if (activeTab === "reports") {
         responseData = await fetchAdminReports(page, 10, searchQuery);
+      } else if (activeTab === "visitors") {
+        responseData = await fetchVisitors();
       } else if (["Pending", "Approved", "Rejected"].includes(activeTab)) {
         responseData = await fetchAdminProperties(
           activeTab,
           page,
           10,
-          searchQuery,
+          searchQuery
         );
       }
 
       if (responseData) {
-        // 🚀 THE FIX: Tell React exactly where to find the array based on your console log!
-        let extractedArray = [];
-
-        if (Array.isArray(responseData.data)) {
-          extractedArray = responseData.data; // Matches your console log perfectly!
-        } else if (Array.isArray(responseData)) {
-          extractedArray = responseData;
-        }
-
-        setData(extractedArray);
+        setData(responseData.data || []);
         setTotalPages(responseData.pagination?.totalPages || 1);
 
         if (["Pending", "Approved", "Rejected"].includes(activeTab)) {
@@ -74,14 +67,13 @@ const Dashboard = () => {
             ...prev,
             [activeTab.toLowerCase()]:
               responseData.pagination?.totalProperties ||
-              responseData.count ||
-              extractedArray.length ||
-              0,
+              responseData.count,
           }));
         }
       }
     } catch (error) {
-      console.error("Error fetching admin data:", error);
+      console.error(error);
+      alert("Failed to load data.");
     } finally {
       setLoading(false);
     }
@@ -105,7 +97,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#f4f6f9" }}>
+    <div className="dashboard-container">
+
       <Sidebar
         activeTab={activeTab}
         setActiveTab={(tab) => {
@@ -116,81 +109,41 @@ const Dashboard = () => {
         }}
       />
 
-      <div
-        className="main"
-        style={{ flex: 1, padding: "20px", marginLeft: "250px" }}
-      >
+      <div className="main">
+
         <Topbar />
 
-        {/* Overview Tab Cards */}
         {activeTab === "overview" && <Cards stats={stats} />}
 
         {activeTab !== "overview" && (
-          <div
-            style={{
-              background: "white",
-              padding: "20px",
-              borderRadius: "8px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "20px",
-              }}
-            >
+          <div className="content-box">
+
+            <div className="header-bar">
               <h2>
                 {activeTab}{" "}
-                {activeTab === "users" || activeTab === "reports"
+                {activeTab === "users" || activeTab === "visitors" || activeTab === "reports"
                   ? ""
                   : "Properties"}
               </h2>
 
-              <form
-                onSubmit={handleSearch}
-                style={{ display: "flex", gap: "10px" }}
-              >
+              <form onSubmit={handleSearch} className="search-form">
                 <input
                   type="text"
                   placeholder={`Search ${activeTab}...`}
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  style={{
-                    padding: "10px",
-                    borderRadius: "5px",
-                    border: "1px solid #ccc",
-                    width: "250px",
-                  }}
+                  className="search-input"
                 />
-                <button
-                  type="submit"
-                  style={{
-                    padding: "10px 15px",
-                    background: "#333",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
+                <button type="submit" className="search-btn">
                   Search
                 </button>
               </form>
             </div>
 
             {loading ? (
-              <p style={{ textAlign: "center", padding: "50px" }}>
-                Loading data...
-              </p>
+              <p className="loading">Loading data...</p>
             ) : data.length === 0 ? (
-              <p
-                style={{ textAlign: "center", padding: "50px", color: "#888" }}
-              >
-                No data found in this category.
-              </p>
+              <p className="empty">No data found.</p>
             ) : (
               <>
                 {["Pending", "Approved", "Rejected"].includes(activeTab) && (
@@ -202,50 +155,39 @@ const Dashboard = () => {
 
                 {activeTab === "users" && <UserTable users={data} />}
 
-                {activeTab === "reports" && <ReportTable reports={data} />}
+                {activeTab === "reports" && (
+                  <p>Reports Table Goes Here</p>
+                )}
+                {activeTab === "visitors" && (
+                  <VisitorsTable visitors={data} />
+                )}
               </>
             )}
 
             {totalPages > 1 && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: "15px",
-                  marginTop: "30px",
-                }}
-              >
+              <div className="pagination">
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  style={{
-                    padding: "8px 16px",
-                    cursor: page === 1 ? "not-allowed" : "pointer",
-                    background: "#eee",
-                    border: "none",
-                    borderRadius: "4px",
-                  }}
                 >
                   Previous
                 </button>
-                <span style={{ padding: "8px", fontWeight: "bold" }}>
+
+                <span>
                   Page {page} of {totalPages}
                 </span>
+
                 <button
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  onClick={() =>
+                    setPage((p) => Math.min(totalPages, p + 1))
+                  }
                   disabled={page === totalPages}
-                  style={{
-                    padding: "8px 16px",
-                    cursor: page === totalPages ? "not-allowed" : "pointer",
-                    background: "#eee",
-                    border: "none",
-                    borderRadius: "4px",
-                  }}
                 >
                   Next
                 </button>
               </div>
             )}
+
           </div>
         )}
       </div>
