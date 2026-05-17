@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { requestRegisterOTP, requestLoginOTP, verifyOTP } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 
-function Modal({ type, closeModal }) {
+function Modal({ type, closeModal, setType }) {
   const [step, setStep] = useState("form");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
+
 
   const [form, setForm] = useState({
     name: "",
@@ -188,6 +189,33 @@ function Modal({ type, closeModal }) {
             >
               {loading ? <span className="loader"></span> : "Send OTP"}
             </button>
+<<<<<<< Updated upstream
+=======
+
+            {/* Quick toggle between login and signup for owners */}
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "15px",
+                fontSize: "0.9rem",
+                cursor: "pointer",
+                color: "#007bff",
+              }}
+              onClick={() => {
+                closeModal();
+
+                if (type === "login") {
+                  navigate("/owner/signup");
+                } else {
+                  navigate("/owner/login");
+                }
+              }}
+            >
+              {type === "login"
+                ? "New Owner? Sign Up Here"
+                : "Already an Owner? Login"}
+            </p>
+>>>>>>> Stashed changes
           </>
         )}
 
@@ -228,7 +256,7 @@ function Modal({ type, closeModal }) {
           </>
         )}
       </div>
-    </div>
+    </div >
   );
 }
 
