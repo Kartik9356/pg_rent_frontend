@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style.css";
 
+// 🔥 1. Add these missing imports!
+import { fetchMyProperties } from "../api/properties";
+import api from "../api/api";
+
 function OwnerDashboard() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,9 +15,11 @@ function OwnerDashboard() {
   useEffect(() => {
     const loadProperties = async () => {
       try {
-        // 🔥 Clean API call returning data directly
+        setLoading(true);
         const data = await fetchMyProperties();
-        setProperties(data);
+        // Ensure it always sets an array
+        const propertyArray = Array.isArray(data) ? data : data.data || [];
+        setProperties(propertyArray);
       } catch (err) {
         setError("Failed to load properties. Please try again.");
         console.error(err);
@@ -26,7 +32,11 @@ function OwnerDashboard() {
   }, []);
 
   const handleDelete = async (propertyId) => {
-    if (window.confirm("Are you sure you want to permanently delete this listing?")) {
+    if (
+      window.confirm(
+        "Are you sure you want to permanently delete this listing?",
+      )
+    ) {
       try {
         await api.delete(`/properties/${propertyId}`);
         setProperties(properties.filter((prop) => prop._id !== propertyId));
@@ -38,27 +48,41 @@ function OwnerDashboard() {
   };
 
   if (loading) {
-    return <div className="loading">Loading your dashboard...</div>;
+    return (
+      <div className="loading" style={{ textAlign: "center", padding: "50px" }}>
+        Loading your dashboard...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return (
+      <div
+        className="error"
+        style={{ textAlign: "center", padding: "50px", color: "red" }}
+      >
+        {error}
+      </div>
+    );
   }
 
-  // ... (Keep your existing return statement with the UI layout here)
   return (
     <div className="dashboard-container">
-
       <div className="dashboard-header">
         <h2 className="dashboard-title">My Dashboard</h2>
-        <button className="add-btn" onClick={() => navigate("/owner/add-property")}>
+        <button
+          className="add-btn"
+          onClick={() => navigate("/owner/add-property")}
+        >
           + Add New Property
         </button>
       </div>
 
       {properties.length === 0 ? (
         <div className="empty-state">
-          <h3 className="empty-title">You haven't listed any properties yet!</h3>
+          <h3 className="empty-title">
+            You haven't listed any properties yet!
+          </h3>
           <p className="empty-text">
             Start reaching seekers by creating your first listing today.
           </p>
@@ -72,7 +96,6 @@ function OwnerDashboard() {
       ) : (
         <div className="table-wrapper">
           <table className="dashboard-table">
-
             <thead className="table-head">
               <tr>
                 <th className="th">Title</th>
@@ -85,25 +108,33 @@ function OwnerDashboard() {
             <tbody>
               {properties.map((prop) => (
                 <tr key={prop._id} className="table-row">
-
                   <td className="td td-title">{prop.title}</td>
                   <td className="td td-category">{prop.propertyCategory}</td>
 
                   <td className="td">
                     <span
-                      className={`status-badge ${prop.status === "Approved"
-                        ? "status-approved"
-                        : prop.status === "Pending"
-                          ? "status-pending"
-                          : "status-rejected"
-                        }`}
+                      className={`status-badge ${
+                        prop.status === "Approved"
+                          ? "status-approved"
+                          : prop.status === "Pending"
+                            ? "status-pending"
+                            : "status-rejected"
+                      }`}
                     >
                       {prop.status}
                     </span>
                   </td>
 
                   <td className="td td-actions">
-                    <button className="edit-btn">Edit</button>
+                    {/* 🔥 2. Added onClick to the Edit Button */}
+                    <button
+                      className="edit-btn"
+                      onClick={() =>
+                        navigate(`/owner/edit-property/${prop._id}`)
+                      }
+                    >
+                      Edit
+                    </button>
 
                     <button
                       className="delete-btn"
@@ -112,11 +143,9 @@ function OwnerDashboard() {
                       Delete
                     </button>
                   </td>
-
                 </tr>
               ))}
             </tbody>
-
           </table>
         </div>
       )}

@@ -1,4 +1,5 @@
 import React from "react";
+// 🔥 Make sure BrowserRouter is NOT imported here anymore!
 import { Routes, Route } from "react-router-dom";
 
 // Import Pages
@@ -9,11 +10,20 @@ import AddPropertyForm from "../components/AddPropertyForm";
 import Rooms from "../pages/Rooms";
 import PropertyDetail from "../pages/PropertyDetail";
 import ProtectedRoute from "./ProtectedRouter";
+import EditPropertyForm from "../components/EditPropertyForm";
+import Features from "../pages/Features";
+import Contact from "../pages/Contact";
 
 const AppRouter = () => {
   return (
+    // 🔥 Start directly with <Routes>!
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/rooms" element={<Rooms />} />
+      <Route path="/rooms/:id" element={<PropertyDetail />} />
+
+      <Route path="/features" element={<Features />} />
+      <Route path="/contact" element={<Contact />} />
 
       <Route
         path="/owner"
@@ -23,6 +33,7 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/admin"
         element={
@@ -31,11 +42,28 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/owner/add-property"
         element={
           <ProtectedRoute role="owner">
             <AddPropertyForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/owner/edit-property/:id"
+        element={
+          <ProtectedRoute role="owner">
+            <EditPropertyForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/edit-property/:id"
+        element={
+          <ProtectedRoute role="admin">
+            <EditPropertyForm />
           </ProtectedRoute>
         }
       />

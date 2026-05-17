@@ -3,6 +3,8 @@ import { requestRegisterOTP, requestLoginOTP, verifyOTP } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 
 function Modal({ type, closeModal }) {
+  const [currentType, setCurrentType] = useState(type);
+
   const [step, setStep] = useState("form");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -11,15 +13,14 @@ function Modal({ type, closeModal }) {
     name: "",
     email: "",
     phone: "",
-    // 🔥 1. CHANGED DEFAULT ROLE FROM "seeker" TO "owner"
-    role: "owner",
+    role: "owner", // Default to owner
     method: "email",
     otp: "",
   });
 
   const navigate = useNavigate();
 
-  // 🔥 SHOW MESSAGE
+  // SHOW MESSAGE
   const showMessage = (text, messageType = "success") => {
     setMessage({ text, type: messageType });
     setTimeout(() => {
@@ -27,11 +28,12 @@ function Modal({ type, closeModal }) {
     }, 3000);
   };
 
-  // 🔥 SEND OTP
+  // SEND OTP
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      if (type === "signup") {
+      // 🔥 2. Use currentType instead of type
+      if (currentType === "signup") {
         await requestRegisterOTP({
           name: form.name,
           email: form.email,
@@ -58,7 +60,7 @@ function Modal({ type, closeModal }) {
     }
   };
 
-  // 🔥 VERIFY OTP
+  // VERIFY OTP
   const handleVerify = async () => {
     setLoading(true);
     try {
@@ -99,10 +101,9 @@ function Modal({ type, closeModal }) {
           <h2>
             {step === "otp"
               ? "Enter OTP"
-              : type === "login"
-                ? "Owner/Admin Login" // 🔥 Updated Title
-                : "Owner Signup"}{" "}
-            {/* 🔥 Updated Title */}
+              : currentType === "login" // 🔥 3. Use currentType
+                ? "Owner/Admin Login"
+                : "Owner Signup"}
           </h2>
           <button onClick={closeModal} className="close-btn">
             ✖
@@ -112,7 +113,7 @@ function Modal({ type, closeModal }) {
         {/* FORM */}
         {step === "form" && (
           <>
-            {type === "signup" && (
+            {currentType === "signup" && ( // 🔥 4. Use currentType
               <>
                 <input
                   type="text"
@@ -132,8 +133,6 @@ function Modal({ type, closeModal }) {
                   value={form.role}
                   onChange={(e) => setForm({ ...form, role: e.target.value })}
                 >
-                  {/* 🔥 2. COMMENTED OUT THE SEEKER OPTION */}
-                  {/* <option value="seeker">Seeker</option> */}
                   <option value="owner">Owner (List a Property)</option>
                 </select>
               </>
@@ -176,7 +175,7 @@ function Modal({ type, closeModal }) {
               {loading ? <span className="loader"></span> : "Send OTP"}
             </button>
 
-            {/* Quick toggle between login and signup for owners */}
+            {/* 🔥 5. REAL SWITCHING LOGIC */}
             <p
               style={{
                 textAlign: "center",
@@ -186,11 +185,11 @@ function Modal({ type, closeModal }) {
                 color: "#007bff",
               }}
               onClick={() => {
-                // Note: You might need to add a setType function in props to toggle this dynamically
-                alert("Toggle between login/signup logic here if needed!");
+                // Instantly toggles between login and signup modes!
+                setCurrentType(currentType === "login" ? "signup" : "login");
               }}
             >
-              {type === "login"
+              {currentType === "login"
                 ? "New Owner? Sign Up Here"
                 : "Already an Owner? Login"}
             </p>
