@@ -70,6 +70,8 @@ function Hero() {
             borderRadius: "12px",
             boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
             flexWrap: "wrap",
+            color: "#000",
+
           }}
         >
           <input
@@ -78,13 +80,16 @@ function Hero() {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             style={{
-              flex: 2,
-              minWidth: "200px",
+              flex: 1,
+              minWidth: "150px",
               padding: "15px",
               border: "1px solid #ddd",
               borderRadius: "8px",
               fontSize: "1rem",
               outline: "none",
+              cursor: "pointer",
+              color: "#000",
+              background: "#fff",
             }}
           />
 
@@ -100,6 +105,8 @@ function Hero() {
               fontSize: "1rem",
               outline: "none",
               cursor: "pointer",
+              color: "#000",
+              background: "#fff",
             }}
           >
             <option value="">Max Budget</option>
@@ -130,19 +137,7 @@ function Hero() {
 
           <button
             type="submit"
-            style={{
-              flex: 1,
-              minWidth: "120px",
-              padding: "15px",
-              background: "#d4af37",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              fontSize: "1.1rem",
-              fontWeight: "bold",
-              cursor: "pointer",
-              transition: "background 0.3s",
-            }}
+            className="hero-search-btn"
           >
             Search
           </button>

@@ -1,14 +1,17 @@
 function CTA() {
   const handleClick = () => {
-    document.getElementById("contact").scrollIntoView({
-      behavior: "smooth",
-    });
+    const contactElem = document.getElementById("contact");
+    if (contactElem) {
+      contactElem.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
   };
 
   return (
-    <section className="cta">
+    <section className="home-cta">
       <h2>Find Comfort. Find Home.</h2>
-      <button onClick={handleClick}>Get Started</button>
+      <button onClick={handleClick} className="home-cta-btn">Get Started</button>
     </section>
   );
 }

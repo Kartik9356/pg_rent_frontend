@@ -1,117 +1,172 @@
-/* ================= SIDEBAR ================= */
+/* ==========================================================================
+   PREMIUM RESPONSIVE SIDEBAR SYSTEM
+   ========================================================================== */
 
 .sidebar {
-  width: 250px;
-
-  /* Navbar height space */
-  top: 80px;
-
-  /* Footer space */
-  bottom: 20px;
-
+  width: 260px;
+  top: 80px; /* navbar spacing */
+  bottom: 0;
   position: fixed;
   left: 0;
-
-  background: linear-gradient(to bottom, #2b0f0f, #4a1f1f);
-
+  background: linear-gradient(135deg, #2b0f0f 0%, #1a0808 100%);
   color: white;
-
-  padding: 20px 12px;
-
+  padding: 30px 16px;
   overflow-y: auto;
   overflow-x: hidden;
-
   box-sizing: border-box;
-
   z-index: 1000;
-
-  border-top-right-radius: 16px;
-  border-bottom-right-radius: 16px;
-
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
   display: flex;
   flex-direction: column;
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* ================= SCROLLBAR ================= */
-
+/* Scrollbar customization */
 .sidebar::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(212, 175, 55, 0.2);
   border-radius: 10px;
 }
 
-/* ================= TITLE ================= */
-
+/* Sidebar Title styling */
 .sidebar h2 {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
   font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.4;
+  font-weight: 800;
+  color: var(--gold, #d4af37);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.15);
+  padding-bottom: 15px;
 }
 
-/* ================= LINKS ================= */
+/* Links Container */
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
 
+/* Menu Items (Links and Buttons) */
 .sidebar a,
-.sidebar button {
+.sidebar button,
+.sidebar-links button {
   display: flex;
   align-items: center;
-  gap: 10px;
-
+  gap: 12px;
   width: 100%;
-
-  padding: 12px 14px;
-  margin-bottom: 10px;
-
-  color: #ddd;
+  padding: 14px 18px;
+  color: #e0e0e0;
   text-decoration: none;
-
   border: none;
-  border-radius: 10px;
-
+  border-radius: 12px;
   background: transparent;
-
   cursor: pointer;
-
-  font-size: 10px;
-  font-weight: 500;
-
-  transition: all 0.3s ease;
-
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   box-sizing: border-box;
 }
 
-/* Hover */
-
+/* Hover effect */
 .sidebar a:hover,
-.sidebar button:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
-  transform: translateX(3px);
+.sidebar button:hover,
+.sidebar-links button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--gold, #d4af37);
+  transform: translateX(6px);
 }
 
-/* Active */
-
+/* Active tab highlighting */
 .sidebar a.active,
-.sidebar button.active {
-  background: #d4af37;
-  color: #2b0f0f;
+.sidebar button.active,
+.sidebar-links button.active {
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
   font-weight: 700;
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25);
+  transform: translateX(4px);
 }
 
-/* ================= RESPONSIVE ================= */
+/* ==========================================================================
+   TABLET & MOBILE RESPONSIVE SIDEBAR TAB BAR
+   ========================================================================== */
 
 @media (max-width: 992px) {
-
   .sidebar {
-    width: 100%;
-    position: relative;
-    top: 0;
-    bottom: 0;
-    border-radius: 0;
+    width: 100% !important;
+    height: auto !important;
+    position: sticky !important;
+    top: 70px !important; /* sits exactly below mobile navbar */
+    left: 0 !important;
+    bottom: auto !important;
+    background: linear-gradient(135deg, #2b0f0f 0%, #1e0909 100%) !important;
+    padding: 10px 15px !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+    gap: 12px !important;
+    border-radius: 0 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12) !important;
+    z-index: 1000 !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide header inside mobile sidebar */
+  .sidebar h2 {
+    display: none !important;
+  }
+
+  /* Horizontal scrolling container structure */
+  .sidebar-links {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    width: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Horizontal Scrolling Chips */
+  .sidebar a,
+  .sidebar button,
+  .sidebar-links button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    padding: 10px 20px !important;
+    margin-bottom: 0 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    border-radius: 30px !important; /* premium chips design */
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #e0e0e0 !important;
+    white-space: nowrap !important;
+    flex: 0 0 auto !important;
+  }
+
+  .sidebar a:hover,
+  .sidebar button:hover,
+  .sidebar-links button:hover {
+    transform: none !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .sidebar a.active,
+  .sidebar button.active,
+  .sidebar-links button.active {
+    background: var(--gold, #d4af37) !important;
+    color: #1e110e !important;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3) !important;
+    transform: none !important;
   }
 }

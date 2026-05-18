@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 /* ================================== Analytics CSS ================================= */
 
 /* Container */
@@ -1355,3 +1357,1097 @@
 }
 
 /* ================================== PropertyDetails CSS ================================= */
+
+/* ================= MOBILE NAVBAR FIX ================= */
+
+.menu-icon {
+  display: none;
+  color: white;
+  z-index: 2001;
+}
+
+.auth-buttons-mobile {
+  display: none;
+}
+
+/* DESKTOP DESIGNS - FIX STICKY OFFSETS FOR SCROLL COVERAGE */
+.filter-bar {
+  position: sticky;
+  top: 90px !important; /* offset 80px navbar + 10px spacing */
+  z-index: 99;
+}
+.property-card {
+  position: sticky;
+  top: 100px !important; /* offset 80px navbar + 20px spacing */
+}
+
+/* ================= TABLET & MOBILE RESPONSIVE STYLES ================= */
+
+@media (max-width: 1024px) {
+  /* 1. Header Sticky Offset adjustment for smaller screens */
+  .filter-bar {
+    position: sticky;
+    top: 80px !important; /* offset 70px mobile navbar + 10px spacing */
+  }
+  .property-card {
+    position: sticky;
+    top: 90px !important; /* offset 70px mobile navbar + 20px spacing */
+  }
+
+  /* 2. Property Detail Page responsiveness */
+  .property-layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .property-left {
+    flex: 1 1 100%;
+  }
+  .property-right {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+  .property-card {
+    position: static !important; /* static flow on smaller screens so it doesn't overlap/shrink */
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+  .main-image-box {
+    height: 350px; /* shorter height to fit screen gracefully */
+  }
+  
+  /* 3. Owner Dashboard Header responsiveness */
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .dashboard-header .add-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  /* 4. Navigation Bar responsiveness */
+  nav {
+    height: 70px;
+    padding: 0 18px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    justify-content: space-between;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  /* Show Hamburger Icon */
+  .menu-icon {
+    display: block;
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  /* Hide Desktop Buttons */
+  .auth-buttons {
+    display: none !important;
+  }
+
+  /* Mobile Sliding Menu */
+  .nav-links {
+    position: fixed;
+    top: 70px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: #3e2723;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 40px;
+    gap: 25px;
+    transition: 0.4s ease;
+    z-index: 2000;
+    overflow-y: auto; /* allow scroll if menu elements overflow */
+  }
+
+  .nav-links.active {
+    left: 0;
+  }
+
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-links a {
+    font-size: 20px;
+    color: white;
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  /* Auth Buttons inside Mobile Menu */
+  .auth-buttons-mobile {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    gap: 15px;
+    margin-top: 20px;
+    padding-bottom: 30px; /* bottom spacing for neatness */
+    align-items: center;
+  }
+
+  .auth-buttons-mobile button,
+  .auth-buttons-mobile .dash-btn {
+    width: 100% !important;
+    padding: 14px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 8px;
+  }
+
+  /* 5. Hero & Search Box adjustments */
+  .hero-content h1 {
+    font-size: 2.2rem !important;
+  }
+  .hero-content p {
+    font-size: 1rem !important;
+    margin-bottom: 25px !important;
+  }
+  .search-box {
+    flex-direction: column;
+    padding: 15px !important;
+    gap: 12px !important;
+    width: 100%;
+  }
+  .search-box input,
+  .search-box select,
+  .search-box button {
+    width: 100% !important;
+    min-width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid #eee;
+  }
+  .search-box button {
+    border-bottom: none !important;
+    margin-top: 5px;
+  }
+
+  /* 6. Rooms Filter Bar adjustments */
+  .filter-bar {
+    position: relative !important;
+    top: 0 !important;
+    padding: 15px !important;
+    margin-bottom: 20px;
+  }
+  .filter-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .filter-group {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+  }
+  .filter-actions {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    display: flex;
+    gap: 10px;
+  }
+  .filter-actions button {
+    flex: 1;
+  }
+
+  /* 7. Image sizing adjustments for property pages */
+  .main-image-box {
+    height: 250px !important;
+  }
+
+  /* 8. Owner Banner padding for mobile */
+  .owner-banner {
+    padding: 60px 15px !important;
+  }
+  .owner-title {
+    font-size: 2rem !important;
+  }
+  .owner-subtitle {
+    font-size: 1rem !important;
+  }
+}
+
+/* ==========================================================================
+   PREMIUM UI/UX DESIGN & TYPOGRAPHY SYSTEM (AUDIT FIXES)
+   ========================================================================== */
+
+/* 1. TYPOGRAPHY SYSTEM UPGRADE */
+
+body, button, input, select, textarea, span, a, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+h1 {
+  font-size: 3.5rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -1px !important;
+  line-height: 1.15 !important;
+  color: var(--gold, #d4af37) !important;
+}
+
+h2 {
+  font-size: 2.6rem !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.5px !important;
+  line-height: 1.25 !important;
+  color: var(--dark-brown, #3e2723) !important;
+}
+
+h3 {
+  font-size: 1.85rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.2px !important;
+  color: var(--chocolate, #5d4037) !important;
+}
+
+h4 {
+  font-size: 1.35rem !important;
+  font-weight: 600 !important;
+  color: var(--dark-brown, #3e2723) !important;
+}
+
+p {
+  font-size: 1.05rem !important;
+  line-height: 1.8 !important;
+  color: #555555 !important;
+}
+
+/* 2. DYNAMIC STICKY SCROLLED NAVBAR GLASSMORPHISM */
+nav {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: var(--dark-brown) !important;
+  z-index: 5000;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+nav.scrolled {
+  height: 70px !important;
+  background: rgba(62, 39, 35, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+/* 3. STRICT & HARMONIOUS SPACING SCALE */
+section, 
+.listings, 
+.features, 
+.info-section, 
+.contact-form-section {
+  padding: 100px 40px !important;
+}
+
+.section-title {
+  font-size: 2.6rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 50px !important;
+  text-align: center;
+  color: var(--dark-brown, #3e2723) !important;
+}
+
+/* 4. VISUALLY DOMINANT CALL-TO-ACTION (CTA) BUTTONS */
+
+/* A. Hero Search Button styling */
+.hero-search-btn {
+  flex: 1;
+  min-width: 130px;
+  padding: 16px 28px !important;
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-search-btn:hover {
+  background: #f0c953 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(212, 175, 55, 0.45) !important;
+}
+
+.hero-search-btn:active {
+  transform: translateY(0);
+}
+
+/* B. Get Started Homepage CTA section card & button */
+.home-cta {
+  padding: 90px 40px !important;
+  text-align: center;
+  background: linear-gradient(135deg, #3e2723 0%, #251411 100%) !important;
+  color: white !important;
+  border-radius: 16px !important;
+  max-width: 1200px !important;
+  margin: 80px auto !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 25px !important;
+  border-top: 5px solid var(--gold, #d4af37) !important;
+}
+
+.home-cta h2 {
+  font-size: 2.8rem !important;
+  font-weight: 800 !important;
+  color: #fdfaf4 !important;
+  letter-spacing: -0.5px !important;
+  margin: 0 !important;
+  line-height: 1.25 !important;
+}
+
+.home-cta-btn {
+  padding: 16px 45px !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: #1e110e !important;
+  background: var(--gold, #d4af37) !important;
+  border: none !important;
+  border-radius: 50px !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.home-cta-btn:hover {
+  background: #f0c953 !important;
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5) !important;
+}
+
+/* C. Contact Form CTA Submit Button */
+.submit-btn {
+  width: 100% !important;
+  padding: 16px !important;
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.submit-btn:hover {
+  background: #f0c953 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 22px rgba(212, 175, 55, 0.45) !important;
+}
+
+/* D. Cards Detail View Button */
+.view-btn {
+  padding: 11px 22px !important;
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  text-decoration: none !important;
+  border-radius: 8px !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.15) !important;
+  display: inline-block !important;
+  text-align: center !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.view-btn:hover {
+  background: #f0c953 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 15px rgba(212, 175, 55, 0.35) !important;
+}
+
+/* E. Owner Add New Property Button styling */
+.add-btn {
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  padding: 12px 28px !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2) !important;
+}
+
+.add-btn:hover {
+  background: #f0c953 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.4) !important;
+}
+
+/* F. Seeker Primary Buttons (e.g. details page book / checkout buttons) */
+.primary-btn {
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2) !important;
+}
+
+.primary-btn:hover {
+  background: #f0c953 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.4) !important;
+}
+
+/* 5. SECTIONS RESPONSIVE ADJUSTMENTS */
+@media (max-width: 992px) {
+  section, 
+  .listings, 
+  .features, 
+  .info-section, 
+  .contact-form-section {
+    padding: 80px 30px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  section, 
+  .listings, 
+  .features, 
+  .info-section, 
+  .contact-form-section {
+    padding: 60px 20px !important;
+  }
+  
+  .section-title {
+    font-size: 2.1rem !important;
+    margin-bottom: 35px !important;
+  }
+
+  .home-cta {
+    margin: 50px 15px !important;
+    padding: 60px 20px !important;
+    border-radius: 12px !important;
+  }
+
+  .home-cta h2 {
+    font-size: 1.9rem !important;
+  }
+  
+  h1 {
+    font-size: 2.4rem !important;
+  }
+
+  h2 {
+    font-size: 1.9rem !important;
+  }
+}
+
+/* ==========================================================================
+   HIGH-FIDELITY PRESET INTERACTION & VISUAL POLISH SYSTEM
+   ========================================================================== */
+
+/* 1. PROPERTY CARD HOVER LIFTS & IMAGE ZOOM */
+.property-card {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 15px rgba(62, 39, 35, 0.05) !important;
+  border: 1px solid rgba(62, 39, 35, 0.06) !important;
+  overflow: hidden !important;
+}
+
+.property-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 16px 35px rgba(62, 39, 35, 0.12) !important;
+  border-color: rgba(212, 175, 55, 0.35) !important;
+}
+
+.card-image {
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.card-img {
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.property-card:hover .card-img {
+  transform: scale(1.08) !important;
+}
+
+/* 2. PREMIUM CATEGORY BADGES */
+.badge {
+  padding: 6px 14px !important;
+  border-radius: 30px !important;
+  font-weight: 700 !important;
+  font-size: 0.78rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12) !important;
+}
+
+.badge-flat {
+  background: linear-gradient(135deg, #d4af37 0%, #b38f24 100%) !important;
+  color: #1e110e !important;
+}
+
+.badge-room {
+  background: linear-gradient(135deg, #5d4037 0%, #3e2723 100%) !important;
+  color: #fdfaf4 !important;
+}
+
+/* 3. ROBUST SCROLLBAR HIDING & CUSTOM FLOATING SCROLL BUTTONS */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+.scroll-btn {
+  width: 48px !important;
+  height: 48px !important;
+  background: var(--dark-brown, #3e2723) !important;
+  color: var(--gold, #d4af37) !important;
+  border: 1.5px solid rgba(212, 175, 55, 0.25) !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  z-index: 10 !important;
+}
+
+.scroll-btn:hover {
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 8px 22px rgba(212, 175, 55, 0.45) !important;
+}
+
+.scroll-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.home-link {
+  font-weight: 700 !important;
+  color: var(--gold, #d4af37) !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.home-link:hover {
+  color: #f0c953 !important;
+  transform: translateX(4px) !important;
+}
+
+/* 4. PREMIUM GLOWING FOCUS FOR ALL INPUT FIELDS & FORM ELEMENTS */
+input, select, textarea {
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gold, #d4af37) !important;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15) !important;
+  background-color: #fffdf9 !important;
+  outline: none !important;
+}
+
+/* 5. GORGEOUS COMPACT ROUTE MODAL POP-UPS */
+.modal-backdrop, .modal-overlay, div[className*="modal-backdrop"] {
+  background: rgba(30, 17, 14, 0.65) !important;
+  backdrop-filter: blur(8px) !important;
+  z-index: 9999 !important;
+}
+
+.modal-box, div[className*="modal-box"] {
+  border-radius: 16px !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35) !important;
+  border-top: 6px solid var(--gold, #d4af37) !important;
+  animation: modalScaleUp 0.38s cubic-bezier(0.165, 0.84, 0.44, 1) forwards !important;
+}
+
+@keyframes modalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 6. ADVANCED HIGH-END CARD-BASED DASHBOARD TABLES */
+table {
+  border-collapse: separate !important;
+  border-spacing: 0 10px !important; /* splits grid to clean floating blocks */
+  background: transparent !important;
+  width: 100% !important;
+}
+
+thead th {
+  background: var(--dark-brown, #3e2723) !important;
+  color: #fdfaf4 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 12px !important;
+  letter-spacing: 0.8px !important;
+  border: none !important;
+  padding: 16px 20px !important;
+}
+
+thead th:first-child {
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+}
+
+thead th:last-child {
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}
+
+tbody tr {
+  background: white !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.02) !important;
+  transition: all 0.28s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border-radius: 10px !important;
+}
+
+tbody tr:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(62, 39, 35, 0.07) !important;
+  background: #fdfdf9 !important;
+}
+
+tbody td {
+  padding: 16px 20px !important;
+  border: none !important;
+  color: #444 !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+}
+
+tbody td:first-child {
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+}
+
+tbody td:last-child {
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}
+
+/* 7. REUSABLE CARDS & GRID FEATURES SPACING */
+.feature, .features-grid > div {
+  border-radius: 16px !important;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border: 1px solid rgba(62, 39, 35, 0.05) !important;
+  background: white !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02) !important;
+}
+
+.feature:hover, .features-grid > div:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 15px 30px rgba(62, 39, 35, 0.08) !important;
+  border-color: rgba(212, 175, 55, 0.25) !important;
+}
+
+/* ==========================================================================
+   ADVANCED FOOTER, CARD, BUTTON OVERLAP GUARD & GLOBAL ANIMATIONS
+   ========================================================================== */
+
+/* 1. PREMIUM FOOTER STYLING & ACCENTS */
+.footer {
+  border-top: 5px solid var(--gold, #d4af37) !important;
+  background: linear-gradient(135deg, #251411 0%, #120807 100%) !important;
+  padding: 80px 40px 30px !important;
+}
+
+.footer-col h3 {
+  color: var(--gold, #d4af37) !important;
+  font-weight: 700 !important;
+  font-size: 1.25rem !important;
+  margin-bottom: 22px !important;
+  letter-spacing: 0.5px !important;
+}
+
+.footer-col ul li a {
+  transition: all 0.3s ease !important;
+  display: inline-block !important;
+  color: #ccc !important;
+}
+
+.footer-col ul li a:hover {
+  color: var(--gold, #d4af37) !important;
+  transform: translateX(5px) !important;
+}
+
+.footer-desc {
+  color: #bbb !important;
+  font-size: 0.95rem !important;
+  line-height: 1.7 !important;
+}
+
+/* Social icons styling */
+.social-icons {
+  display: flex !important;
+  gap: 12px !important;
+  margin-top: 20px !important;
+}
+
+.social-icons .icon {
+  width: 40px !important;
+  height: 40px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+  color: #fff !important;
+  font-size: 16px !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.social-icons .icon:hover {
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 6px 15px rgba(212, 175, 55, 0.35) !important;
+  border-color: var(--gold, #d4af37) !important;
+}
+
+/* Newsletter Subscription Bar */
+.newsletter-box {
+  display: flex !important;
+  gap: 0 !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1.5px solid rgba(212, 175, 55, 0.25) !important;
+  border-radius: 30px !important;
+  overflow: hidden !important;
+  max-width: 100% !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  margin-top: 15px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.newsletter-box:focus-within {
+  border-color: var(--gold, #d4af37) !important;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.newsletter-box input {
+  flex: 1 !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 14px 20px !important;
+  color: white !important;
+  font-size: 14px !important;
+  outline: none !important;
+  box-shadow: none !important;
+  min-width: 0 !important;
+}
+
+.newsletter-box input::placeholder {
+  color: rgba(255, 255, 255, 0.38) !important;
+}
+
+.newsletter-box button {
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  border: none !important;
+  padding: 14px 28px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  font-size: 14px !important;
+  white-space: nowrap !important;
+  border-radius: 0 !important;
+}
+
+.newsletter-box button:hover {
+  background: #f0c953 !important;
+}
+
+/* 2. HIGH-FIDELITY STANDARD CARD UPGRADE (ROOM CARDS) */
+.card {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(62, 39, 35, 0.05) !important;
+  box-shadow: 0 4px 15px rgba(62, 39, 35, 0.04) !important;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  background: white !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 16px 35px rgba(62, 39, 35, 0.12) !important;
+  border-color: rgba(212, 175, 55, 0.3) !important;
+}
+
+.card img {
+  width: 100% !important;
+  height: 220px !important;
+  object-fit: cover !important;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.card:hover img {
+  transform: scale(1.08) !important;
+}
+
+.card-body button {
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  padding: 12px 20px !important;
+  font-size: 0.95rem !important;
+  cursor: pointer !important;
+  border: none !important;
+  width: 100% !important;
+  margin-top: 15px !important;
+  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2) !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.card-body button:hover {
+  background: #f0c953 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 15px rgba(212, 175, 55, 0.35) !important;
+}
+
+/* 3. STRICT BUTTON OVERLAP PROTECTION GLOBALLY */
+button, 
+.view-btn, 
+.submit-btn, 
+.primary-btn, 
+.dash-btn, 
+.logout-btn, 
+.login-btn, 
+.signup-btn {
+  white-space: nowrap !important;
+  line-height: 1.25 !important;
+  height: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* 4. GLOBAL AESTHETIC MICRO-ANIMATIONS ENGINE */
+a, button, input, select, textarea, .card, .property-card, tr {
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+/* 5. FOOTER NEWSLETTER STACKING FOR MOBILE */
+@media (max-width: 480px) {
+  .newsletter-box {
+    flex-direction: column !important;
+    border-radius: 12px !important;
+    background: transparent !important;
+    border: none !important;
+    gap: 10px !important;
+    box-shadow: none !important;
+  }
+  
+  .newsletter-box input {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.2) !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .newsletter-box button {
+    border-radius: 8px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+
+/* ==========================================================================
+   DESKTOP NAVBAR AUTH BUTTONS VISIBILITY FIX
+   ========================================================================== */
+.auth-buttons span {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  letter-spacing: 0.2px !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.auth-buttons .dash-btn {
+  color: var(--gold, #d4af37) !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1.5px solid rgba(212, 175, 55, 0.3) !important;
+  padding: 8px 18px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.auth-buttons .dash-btn:hover {
+  background: var(--gold, #d4af37) !important;
+  color: #1e110e !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ==========================================================================
+   CONTACT FORM PAGE & BG UPGRADE
+   ========================================================================== */
+.contact-page {
+  min-height: 100vh !important;
+  background: radial-gradient(circle at 10% 20%, rgba(62, 39, 35, 0.03) 0%, rgba(26, 8, 8, 0.07) 90.1%),
+              linear-gradient(135deg, #fdfaf4 0%, #f4eee1 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 120px 24px 80px !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Glassy container card for Contact Form */
+.contact-page .cta {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1.5px solid rgba(212, 175, 55, 0.2) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 50px rgba(62, 39, 35, 0.08) !important;
+  padding: 50px 40px !important;
+  max-width: 750px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  text-align: center !important;
+  animation: contactFadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards !important;
+}
+
+@keyframes contactFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-page .cta-title {
+  font-size: 2.6rem !important;
+  font-weight: 800 !important;
+  color: var(--dark-brown, #3e2723) !important;
+  margin-bottom: 12px !important;
+  letter-spacing: -0.5px !important;
+}
+
+.contact-page .cta-subtitle {
+  font-size: 1.1rem !important;
+  color: var(--chocolate, #5d4037) !important;
+  margin-bottom: 35px !important;
+  font-weight: 500 !important;
+}
+
+/* Form grid styling */
+.contact-form {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 20px !important;
+  width: 100% !important;
+}
+
+/* Input group styling */
+.contact-form .input-group {
+  margin-bottom: 0 !important;
+  width: 100% !important;
+}
+
+/* Force textarea to span full width in 2-column grid */
+.contact-form .input-group:nth-child(7) {
+  grid-column: span 2 !important;
+}
+
+/* Force submit button to span full width */
+.contact-form .submit-btn {
+  grid-column: span 2 !important;
+  margin-top: 15px !important;
+}
+
+@media (max-width: 768px) {
+  .contact-page {
+    padding: 100px 16px 60px !important;
+  }
+  
+  .contact-page .cta {
+    padding: 35px 20px !important;
+  }
+  
+  .contact-form {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+  }
+  
+  .contact-form .input-group:nth-child(7),
+  .contact-form .submit-btn {
+    grid-column: span 1 !important;
+  }
+  
+  .contact-page .cta-title {
+    font-size: 2rem !important;
+  }
+}
+
+/* ==========================================================================
+   ROOM BUDDY BRAND LOGO FOOTER COLOR FIX
+   ========================================================================== */
+.footer-col .logo-text {
+  color: var(--gold, #d4af37) !important;
+  font-weight: 800 !important;
+  font-size: 2.2rem !important;
+  letter-spacing: -0.5px !important;
+  margin-bottom: 20px !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+}
+

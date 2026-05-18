@@ -261,3 +261,294 @@ input:focus {
     flex-direction: column;
   }
 }
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+/* TABLET */
+@media (max-width: 992px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 18px;
+  }
+
+  .header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-form {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chart-box,
+  .table-section,
+  .form-section,
+  .box,
+  .content-box {
+    padding: 20px;
+  }
+
+  table {
+    min-width: 700px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .main {
+    padding: 15px;
+  }
+
+  .topbar {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .topbar h2,
+  .header-bar h2 {
+    font-size: 22px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .card p {
+    font-size: 24px;
+  }
+
+  .chart-box,
+  .table-section,
+  .form-section,
+  .box,
+  .content-box {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .search-form {
+    flex-direction: column;
+  }
+
+  .search-input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+
+  /* TABLE RESPONSIVE */
+  .table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  table {
+    min-width: 650px;
+  }
+
+  th,
+  td {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  table img {
+    width: 65px;
+    height: 50px;
+  }
+
+  /* FORM */
+  .form-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  input {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  /* PAGINATION */
+  .pagination {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .empty,
+  .loading {
+    font-size: 16px;
+    padding: 30px 15px;
+  }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 480px) {
+
+  .main {
+    padding: 12px;
+  }
+
+  .topbar {
+    padding: 14px;
+  }
+
+  .topbar h2,
+  .header-bar h2 {
+    font-size: 20px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .card h4 {
+    font-size: 14px;
+  }
+
+  .card p {
+    font-size: 22px;
+  }
+
+  .chart-box,
+  .table-section,
+  .form-section,
+  .box,
+  .content-box {
+    padding: 14px;
+  }
+
+  button {
+    font-size: 13px;
+    padding: 11px;
+  }
+
+  th,
+  td {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  table img {
+    width: 55px;
+    height: 45px;
+  }
+}
+
+/* ==========================================================================
+   HIGH-FIDELITY DASHBOARD INTERACTIVE VISUAL POLISH
+   ========================================================================== */
+
+/* 1. DYNAMIC CUBIC-BEZIER HOVER ANIMATION FOR STAT CARDS */
+.card {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border-left: 5px solid #d4af37 !important;
+}
+
+.card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 14px 30px rgba(62, 39, 35, 0.08) !important;
+  border-left-color: #b8962e !important;
+}
+
+/* 2. GLOWING ACCENT FOCUS STATE ON FORM INPUTS & SEARCHES */
+.search-input, input, select, textarea {
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border: 1.5px solid #e2e8f0 !important;
+}
+
+.search-input:focus, input:focus, select:focus, textarea:focus {
+  border-color: #d4af37 !important;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15) !important;
+  outline: none !important;
+  background: #fffdf9 !important;
+}
+
+/* 3. SMOOTH CUBIC-BEZIER FLOATING HOVER ON TABLE ROWS */
+tbody tr {
+  transition: all 0.28s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+tbody tr:hover {
+  background: #fdfdf9 !important;
+  box-shadow: 0 4px 12px rgba(62, 39, 35, 0.03) !important;
+}
+
+/* 4. BUTTON OVERLAP SAFETY & INTERACTIVE FLOATING HOVER EFFECTS */
+button, .approve, .reject, .edit, .delete {
+  white-space: nowrap !important;
+  line-height: 1.25 !important;
+  height: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+button:hover, .approve:hover, .reject:hover, .edit:hover, .delete:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* 5. GENERAL CONTAINER LIFT & EASE */
+.chart-box,
+.table-section,
+.form-section,
+.box,
+.content-box {
+  transition: all 0.3s ease !important;
+  border: 1px solid rgba(62, 39, 35, 0.04) !important;
+}

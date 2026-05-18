@@ -189,8 +189,6 @@ function Modal({ type, closeModal, setType }) {
             >
               {loading ? <span className="loader"></span> : "Send OTP"}
             </button>
-<<<<<<< Updated upstream
-=======
 
             {/* Quick toggle between login and signup for owners */}
             <p
@@ -215,7 +213,6 @@ function Modal({ type, closeModal, setType }) {
                 ? "New Owner? Sign Up Here"
                 : "Already an Owner? Login"}
             </p>
->>>>>>> Stashed changes
           </>
         )}
 
