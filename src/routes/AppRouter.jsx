@@ -12,6 +12,7 @@ import ProtectedRoute from "./ProtectedRouter";
 import EditPropertyForm from "../components/EditPropertyForm";
 import Contact from "../pages/Contact";
 import Users from "../components/Users";
+import Profile from "../pages/Profile";
 
 const AppRouter = () => {
   return (
@@ -65,8 +66,7 @@ const AppRouter = () => {
       />
 
       <Route path="/contact" element={<Contact />} />
-      <Route path="/users" element={<Users />} />
-
+      <Route path="/profile" element={<Profile />} />
 
       <Route path="*" element={<h2>404 - Page Not Found</h2>} />
     </Routes>

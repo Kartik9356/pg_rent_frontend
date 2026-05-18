@@ -7,8 +7,7 @@ import api from "./api/api";
 import Footer from "./components/Footer";
 
 function App() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
+  const [modalType, setModalType] = useState(null); // 'login' | 'signup' | null
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   useEffect(() => {
@@ -31,18 +30,18 @@ function App() {
     <Router>
       <div className="App">
         <Navbar
-          openLogin={() => setShowLogin(true)}
-          openSignup={() => setShowSignup(true)}
+          openLogin={() => setModalType("login")}
+          openSignup={() => setModalType("signup")}
           user={user}
           setUser={setUser}
         />
 
-        {showLogin && (
-          <Modal type="login" closeModal={() => setShowLogin(false)} />
-        )}
-
-        {showSignup && (
-          <Modal type="signup" closeModal={() => setShowSignup(false)} />
+        {modalType && (
+          <Modal
+            type={modalType}
+            closeModal={() => setModalType(null)}
+            setType={setModalType}
+          />
         )}
 
         <AppRouter />

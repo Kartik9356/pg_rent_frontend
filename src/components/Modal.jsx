@@ -190,28 +190,28 @@ function Modal({ type, closeModal, setType }) {
               {loading ? <span className="loader"></span> : "Send OTP"}
             </button>
 
-            {/* Quick toggle between login and signup for owners */}
+            {/* Quick toggle between login and signup */}
             <p
               style={{
                 textAlign: "center",
                 marginTop: "15px",
                 fontSize: "0.9rem",
                 cursor: "pointer",
-                color: "#007bff",
+                color: "#d4af37",
+                fontWeight: "600",
+                textDecoration: "underline",
               }}
               onClick={() => {
-                closeModal();
-
                 if (type === "login") {
-                  navigate("/owner/signup");
+                  setType("signup");
                 } else {
-                  navigate("/owner/login");
+                  setType("login");
                 }
               }}
             >
               {type === "login"
-                ? "New Owner? Sign Up Here"
-                : "Already an Owner? Login"}
+                ? "New User / Owner? Sign Up Here"
+                : "Already registered? Login"}
             </p>
           </>
         )}
