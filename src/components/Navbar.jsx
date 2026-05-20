@@ -101,7 +101,7 @@ function Navbar({ openLogin, openSignup, user, setUser }) {
           <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
         </li>
         <li>
-          <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
+          <Link to="/features" onClick={() => setMenuOpen(false)}>Features</Link>
         </li>{" "}
         {/* Keep anchor for on-page scrolling */}
         <li>
